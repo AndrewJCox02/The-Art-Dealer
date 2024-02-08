@@ -34,7 +34,15 @@ public class Deck {
 
     // Returns the first card in the deck
     public Cards draw() {
-        return deck.remove(0);
+        // First card in the deck is removed and put into drawnCard
+        Cards drawnCard = deck.remove(0);
+
+        // The entire deck is rotated, so deck[1] is now deck[0], and deck[0] is now deck[51]
+        // and so on throughout the deck
+        deck.add(drawnCard);
+
+        // Returns the drawn card
+        return drawnCard;
     }
 }
 
