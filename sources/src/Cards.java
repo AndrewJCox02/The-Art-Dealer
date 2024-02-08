@@ -1,5 +1,5 @@
 /* File: Cards.java
- * Author: Andrew Cox
+ * Author(s): Andrew Cox
  * Date: 2/8/2024
  * Purpose: This class is responsible for representing the cards in the deck
  */

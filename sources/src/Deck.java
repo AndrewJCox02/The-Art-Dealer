@@ -1,5 +1,5 @@
 /* File: Deck.java
- * Author: Andrew Cox
+ * Author(s): Andrew Cox
  * Date: 2/8/2024
  * Purpose: This class is responsible for representing the deck in which cards are held
  *          and with which the "game" is played
