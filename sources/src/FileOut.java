@@ -18,6 +18,11 @@ public class FileOut {
 
         String fileName = "CardsDealt.txt";
 
+        // if there are no cards to save
+        if (in.size() == 0) {
+            return;
+        }
+
         Date today = Calendar.getInstance().getTime();
         // format the date into mm/dd/yyyy
         String dateLine = (today.getMonth() + 1) +
@@ -32,7 +37,6 @@ public class FileOut {
             if (file.createNewFile()) {
                 System.out.println("Creating new file [" + fileName + "]");
             }
-
             // create a new BufferedWriter, with the FileWriter's append flag being true
             fOut = new BufferedWriter(new FileWriter(file.getAbsoluteFile(),true));
             fOut.write(dateLine);
@@ -42,7 +46,6 @@ public class FileOut {
                 fOut.write(hand.getHandAsCsv());
                 fOut.newLine();
             }
-
         }
         catch (IOException ioe) {
             ioe.printStackTrace();

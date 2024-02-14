@@ -28,7 +28,7 @@ public class Cards {
 
     // This class is used for testing
     public String toString() {
-        return rank + " of " + suit;
+        return rank + "_of_" + suit;
     }
 
     public String getRank() {

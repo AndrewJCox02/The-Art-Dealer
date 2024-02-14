@@ -23,19 +23,73 @@ public class HandOfCards {
         hand.add(deck.draw());
     }
 
+    // returns a string of formatted Card data
+    private String getFormattedCard(Cards card) {
+
+        Integer cardsRank = Integer.valueOf(card.getRank());
+
+        // translate rank from a value between 2 and 14 into a card suit
+        String rank;
+        if (cardsRank <= 10) {
+            rank = String.valueOf(cardsRank);
+        }
+        else {
+            switch (cardsRank) {
+                case 11:
+                    rank = "J";
+                    break;
+                case 12:
+                    rank = "Q";
+                    break;
+                case 13:
+                    rank = "K";
+                    break;
+                case 14:
+                    rank = "A";
+                    break;
+                default:
+                    rank = "Error";
+            }
+        }
+
+        // shorten the cards rank into a one character value
+        String suit;
+        switch (card.getSuit()) {
+            case "clubs":
+                suit = "C";
+                break;
+            case "diamonds":
+                suit = "D";
+                break;
+            case "spades":
+                suit = "S";
+                break;
+            case "hearts":
+                suit = "H";
+                break;
+            default:
+                suit = "Error";
+        }
+
+        return rank + suit;
+    }
+
     // formats the cards as a comma separated list
     public String getHandAsCsv() {
-
         String out;
         if (hand.size() < 4) {
             return "Empty";
         }
 
-        out = hand.get(0).getRank() + hand.get(0).getSuit();
+        out = getFormattedCard(hand.get(0));
         for (int i = 1; i < 4; i++) {
-            out += "," + hand.get(i).getRank() + hand.get(i).getSuit();
+            out += "," + getFormattedCard(hand.get(i));
         }
 
         return out;
+    }
+
+    public ArrayList<Cards> getHand() {
+        return hand;
     }
 }
