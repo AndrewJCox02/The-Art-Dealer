@@ -44,5 +44,9 @@ public class Deck {
         // Returns the drawn card
         return drawnCard;
     }
+
+    public void shuffle() {
+        Collections.shuffle(deck);
+    }
 }
 

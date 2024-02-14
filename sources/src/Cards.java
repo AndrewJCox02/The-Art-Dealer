@@ -31,4 +31,11 @@ public class Cards {
         return rank + " of " + suit;
     }
 
+    public String getRank() {
+        return rank;
+    }
+
+    public String getSuit() {
+        return suit;
+    }
 }
