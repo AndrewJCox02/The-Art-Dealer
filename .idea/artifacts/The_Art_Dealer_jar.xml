@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="The-Art-Dealer:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/The_Art_Dealer_jar</output-path>
+    <root id="archive" name="The-Art-Dealer.jar">
+      <element id="module-output" name="sources" />
+      <element id="module-output" name="The-Art-Dealer" />
+    </root>
+  </artifact>
+</component>
