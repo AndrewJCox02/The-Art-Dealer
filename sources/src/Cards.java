@@ -1,7 +1,8 @@
 /* File: Cards.java
  * Author(s): Andrew Cox
  * Date: 2/8/2024
- * Purpose: This class is responsible for representing the cards in the deck
+ * Purpose: This class is responsible for representing the cards in the deck, each card has a rank and a suit, and this
+ class provides to get these values and to get a string representation of the card.
  */
 public class Cards {
 
