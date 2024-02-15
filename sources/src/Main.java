@@ -28,7 +28,9 @@ of the project, under 'JAR files from libraries' section of the pop-up make sure
 ticked.  Click on 'OK'  to move to the next window that shows the details of the executable file you are creating.
 Click on 'OK' and you will be taken back to the main IDE screen.  From the main screen go to the 'Build' tab and click
 on the 'Build Artifacts' button.  From the pop-up menu choose the artifact you just created and click on 'Build'.  The
-Windows executable java file is built and can now be found in the 'Out' file under 'Artifacts' in the program files.
+Windows executable java file is built and can now be found in the 'Out' file under 'Artifacts' in the program files.  It
+is important to note that the file labeled 'PlayingCards' needs to be put into the same folder as the executable file
+you have just built in order for the program to run properly.
 * Class Purpose: This class is the main class and creates a new instance of LaunchGUI()
 */
 
