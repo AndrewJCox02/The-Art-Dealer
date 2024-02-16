@@ -1,6 +1,6 @@
 /* File: LaunchGUI.java
  * Author(s): Andrew Cox, Robert Reinholdt, Schuyler Condon
- * Date: 2/14/2024
+ * Date: 2/15/2024
  * Purpose: This class is responsible for creating the GUI for the project 1 game.  The GUI as defined by this class
  includes a welcome/informational JOptionPane dialog box, a JFrame with "deal" and "quit" buttons that displays
  * different card images, and a goodbye JOptionPane dialog box.
@@ -51,7 +51,8 @@ public class LaunchGUI {
 
         Graphics g = frame.getGraphics();
 
-        // assigning button actions
+        // ran into problem where code could not display images
+        // rewrote original code to allow the program use internal resources for the card images
         deal.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -67,14 +68,13 @@ public class LaunchGUI {
 
                 // read the playing card images into memory
                 try {
-                    i1 = ImageIO.read(new File("PlayingCards\\" + cards.get(0).toString() + ".png"));
-                    i2 = ImageIO.read(new File("PlayingCards\\" + cards.get(1).toString() + ".png"));
-                    i3 = ImageIO.read(new File("PlayingCards\\" + cards.get(2).toString() + ".png"));
-                    i4 = ImageIO.read(new File("PlayingCards\\" + cards.get(3).toString() + ".png"));
+                    i1 = ImageIO.read(getClass().getResource("/PlayingCards/" + cards.get(0).toString() + ".png"));
+                    i2 = ImageIO.read(getClass().getResource("/PlayingCards/" + cards.get(1).toString() + ".png"));
+                    i3 = ImageIO.read(getClass().getResource("/PlayingCards/" + cards.get(2).toString() + ".png"));
+                    i4 = ImageIO.read(getClass().getResource("/PlayingCards/" + cards.get(3).toString() + ".png"));
                 } catch (IOException ioe) {
                     ioe.printStackTrace();
                 }
-
 
                 g.drawImage(i1, 100, 50, 200, 300, null);
                 g.drawImage(i2, 300, 50, 200, 300, null);
