@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class HandOfCards {
 
     // ArrayList to hold the cards that are in the hand
-    private final ArrayList<Cards> hand = new ArrayList<>(4);
+    private final ArrayList<Card> hand = new ArrayList<>(4);
 
     // constructor takes a deck and draws a new hand
     HandOfCards(Deck deck) {
@@ -29,7 +29,7 @@ public class HandOfCards {
     }
 
     // returns a string of formatted Card data
-    private String getFormattedCard(Cards card) {
+    private String getFormattedCard(Card card) {
 
         Integer cardsRank = Integer.valueOf(card.getRank());
 
@@ -94,7 +94,7 @@ public class HandOfCards {
         return out;
     }
 
-    public ArrayList<Cards> getHand() {
+    public ArrayList<Card> getHand() {
         return hand;
     }
 }

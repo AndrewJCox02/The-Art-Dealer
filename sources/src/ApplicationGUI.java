@@ -1,4 +1,4 @@
-/* File: LaunchGUI.java
+/* File: ApplicationGUI.java
  * Author(s): Andrew Cox, Robert Reinholdt, Schuyler Condon
  * Date: 2/15/2024
  * Purpose: This class is responsible for creating the GUI for the project 1 game.  The GUI as defined by this class
@@ -8,29 +8,33 @@
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class LaunchGUI {
-    LaunchGUI() {
+public class ApplicationGUI {
+    ApplicationGUI() {
 
         // message box announcing program's purpose and user instructions
         UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
-        JOptionPane.showMessageDialog(null, "This program will deal " +
-                        "four cards at a time, as many times as you want. \nThere will be no Jokers and no duplicates " +
-                        "within the four cards dealt to you, \nbut you might see repeat cards in different hands. " +
-                        "\nAll hands and the date they were pulled are recorded and stored in the Cards \nDealt text " +
-                        "file that was downloaded with this program. \n \nTo draw cards click deal, and to stop click quit. " +
-                        "Click OK to continue.\n\n",
+        JOptionPane.showMessageDialog(
+                null,
+                "This program will deal four cards at a time, as many times as you want. " +
+                        "\nThere will be no Jokers and no duplicates within the four cards dealt to you, " +
+                        "\nbut you might see repeat cards in different hands. " +
+                        "\nAll hands and the date they were pulled are recorded and stored in the Cards " +
+                        "\nDealt text file that was downloaded with this program. " +
+                        "\n\nTo draw cards click deal, and to stop click quit. Click OK to continue." +
+                        "\n\n",
                 "Welcome to The Art Dealer",
                 JOptionPane.INFORMATION_MESSAGE);
 
 
 
+        // deck stuff
+        Deck deck = new Deck();
+        ArrayList<HandOfCards> handsOfCards = new ArrayList<>();
 
         // Creating instance of JFrame
         JFrame frame = new JFrame();
@@ -39,15 +43,27 @@ public class LaunchGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 800);
 
-        // deck stuff
-        Deck deck = new Deck();
-        ArrayList<HandOfCards> handsOfCards = new ArrayList<>();
-
         // Creating instances of JButton for Deal and Quit buttons
         JButton deal = new JButton(" Deal");
         JButton quit = new JButton("Quit");
         deal.setBounds(100, 650, 150, 75);
         quit.setBounds(350, 650, 150, 75);
+
+        // override the default closing operation to save cards in the buffer
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                //displays goodbye message upon clicking quit button
+                JOptionPane.showMessageDialog(frame, "Thank you for playing! \nPlay again soon!",
+                        "Goodbye", JOptionPane.INFORMATION_MESSAGE);
+
+                // write the output file and close application
+                FileOut.writeOutputFile(handsOfCards);
+                frame.dispose();
+
+                System.exit(0);
+            }
+        });
 
         Graphics g = frame.getGraphics();
 
@@ -59,7 +75,7 @@ public class LaunchGUI {
                 HandOfCards hand = new HandOfCards(deck); // draw a new hand
                 handsOfCards.add(hand); // record the hand
 
-                ArrayList<Cards> cards = hand.getHand(); // stores cards in hand in ArrayList named cards
+                ArrayList<Card> cards = hand.getHand(); // stores cards in hand in an ArrayList named cards
 
                 BufferedImage i1 = null;
                 BufferedImage i2 = null;
@@ -67,19 +83,17 @@ public class LaunchGUI {
                 BufferedImage i4 = null;
 
                 // read the playing card images into memory
-                try {
-                    i1 = ImageIO.read(getClass().getResource("/PlayingCards/" + cards.get(0).toString() + ".png"));
-                    i2 = ImageIO.read(getClass().getResource("/PlayingCards/" + cards.get(1).toString() + ".png"));
-                    i3 = ImageIO.read(getClass().getResource("/PlayingCards/" + cards.get(2).toString() + ".png"));
-                    i4 = ImageIO.read(getClass().getResource("/PlayingCards/" + cards.get(3).toString() + ".png"));
-                } catch (IOException ioe) {
-                    ioe.printStackTrace();
-                }
+                i1 = getCardImage(cards.get(0));
+                i2 = getCardImage(cards.get(1));
+                i3 = getCardImage(cards.get(2));
+                i4 = getCardImage(cards.get(3));
 
                 g.drawImage(i1, 100, 50, 200, 300, null);
                 g.drawImage(i2, 300, 50, 200, 300, null);
                 g.drawImage(i3, 100, 350, 200, 300, null);
                 g.drawImage(i4, 300, 350, 200, 300, null);
+
+
             }
         });
 
@@ -87,7 +101,6 @@ public class LaunchGUI {
         quit.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 //displays goodbye message upon clicking quit button
                 JOptionPane.showMessageDialog(frame, "Thank you for playing! \nPlay again soon!",
                         "Goodbye", JOptionPane.INFORMATION_MESSAGE);
@@ -109,9 +122,30 @@ public class LaunchGUI {
         being used specifically to fix a problem of the deal and quit buttons not being displayed after
         the welcome message
         */
+
+        g.setColor(new Color(60,150,60));
+        g.fillRect(2,2,500,500);
+
         frame.validate();
         frame.repaint();
+
+
+
+
     }
+
+    // gets a BufferedImage of the supplied card
+    private BufferedImage getCardImage(Card card) {
+        try {
+            return ImageIO.read(getClass().getResource("/PlayingCards/" + card.toString() + ".png"));
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+            return null;
+        }
+    }
+
+
+
 
 
 }

@@ -1,10 +1,10 @@
 /* File: Cards.java
- * Author(s): Andrew Cox
+ * Author(s): Andrew Cox, Robert Reinholdt
  * Date: 2/8/2024
  * Purpose: This class is responsible for representing the cards in the deck, each card has a rank and a suit, and this
  class provides to get these values and to get a string representation of the card.
  */
-public class Cards {
+public class Card {
 
     // The cards class will hold the values of an individual card's rank and suit
     private final String rank;
@@ -22,12 +22,13 @@ public class Cards {
      *            class, however all instances of this class will be created in the deck
      *             class, so we do not need to worry about this.
      */
-    Cards(String rank, String suit) {
+    Card(String rank, String suit) {
         this.rank = rank;
         this.suit = suit;
     }
 
-    // This class is used for testing
+    // returns a String representation of the card
+    // Note: rank is a number between 2 and 14
     public String toString() {
         return rank + "_of_" + suit;
     }
@@ -38,5 +39,13 @@ public class Cards {
 
     public String getSuit() {
         return suit;
+    }
+
+    // checks if two card objects are of the same card
+    public Boolean equals(Card card) {
+        if (this.toString().equals(card.toString())) {
+            return true;
+        }
+        return false;
     }
 }
