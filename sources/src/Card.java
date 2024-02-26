@@ -1,3 +1,5 @@
+import java.util.Locale;
+
 /* File: Cards.java
  * Author(s): Andrew Cox, Robert Reinholdt
  * Date: 2/8/2024
@@ -23,14 +25,98 @@ public class Card {
      *             class, so we do not need to worry about this.
      */
     Card(String rank, String suit) {
-        this.rank = rank;
-        this.suit = suit;
+        this.rank = rank.toUpperCase();
+        this.suit = suit.toLowerCase();
     }
 
     // returns a String representation of the card
     // Note: rank is a number between 2 and 14
     public String toString() {
         return rank + "_of_" + suit;
+    }
+
+    // converts to the 2 through 14 numeric representation of rank
+    private static Integer translateRank(String rank) {
+        switch (rank) {
+            case "2":
+                return 2;
+            case "3":
+                return 3;
+            case "4":
+                return 4;
+            case "5":
+                return 5;
+            case "6":
+                return 6;
+            case "7":
+                return 7;
+            case "8":
+                return 8;
+            case "9":
+                return 9;
+            case "10":
+                return 10;
+            case "J":
+                return 11;
+            case "Q":
+                return 12;
+            case "K":
+                return 13;
+            case "A":
+                return 14;
+            default:
+                return 0;
+        }
+    }
+
+    // returns a string of formatted Card data
+    public String getFormattedCard() {
+        Integer cardsRank = Integer.valueOf(this.getRank());
+
+        // translate rank from a value between 2 and 14 into a card suit
+        String rank;
+        if (cardsRank <= 10) {
+            rank = String.valueOf(cardsRank);
+        }
+        else {
+            switch (cardsRank) {
+                case 11:
+                    rank = "J";
+                    break;
+                case 12:
+                    rank = "Q";
+                    break;
+                case 13:
+                    rank = "K";
+                    break;
+                case 14:
+                    rank = "A";
+                    break;
+                default:
+                    rank = "Error";
+            }
+        }
+
+        // shorten the cards rank into a one character value
+        String suit;
+        switch (this.getSuit()) {
+            case "clubs":
+                suit = "C";
+                break;
+            case "diamonds":
+                suit = "D";
+                break;
+            case "spades":
+                suit = "S";
+                break;
+            case "hearts":
+                suit = "H";
+                break;
+            default:
+                suit = "Error";
+        }
+
+        return rank + suit;
     }
 
     public String getRank() {
@@ -40,6 +126,8 @@ public class Card {
     public String getSuit() {
         return suit;
     }
+
+
 
     // checks if two card objects are of the same card
     public Boolean equals(Card card) {

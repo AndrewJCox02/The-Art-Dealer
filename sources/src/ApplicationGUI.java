@@ -16,8 +16,11 @@ import java.util.ArrayList;
 public class ApplicationGUI {
     ApplicationGUI() {
 
+        Integer screenWidth = 1000;
+        Integer screenHeight = 800;
+
         // message box announcing program's purpose and user instructions
-        UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
+        /*UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
         JOptionPane.showMessageDialog(
                 null,
                 "This program will deal four cards at a time, as many times as you want. " +
@@ -28,7 +31,7 @@ public class ApplicationGUI {
                         "\n\nTo draw cards click deal, and to stop click quit. Click OK to continue." +
                         "\n\n",
                 "Welcome to The Art Dealer",
-                JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.INFORMATION_MESSAGE); */
 
 
 
@@ -41,12 +44,24 @@ public class ApplicationGUI {
         frame.setLayout(null);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 800);
+        frame.setSize(screenWidth, screenHeight);
+        frame.setTitle("The Art Dealer");
+
+        // divide the frame into panels
+        // main panel where cards are displayed
+        JPanel mainPanel = new JPanel();
+        mainPanel.setBounds(0,0,screenWidth-250,screenHeight);
+        mainPanel.setBackground(new Color(40,160,40));
+
+        // sidebar where a log of card sets is displayed
+        JPanel sidePanel = new JPanel();
+        sidePanel.setBounds(screenWidth-250,0,250,screenHeight);
+        sidePanel.setBackground(new Color(40,120,40));
 
         // Creating instances of JButton for Deal and Quit buttons
-        JButton deal = new JButton(" Deal");
+        JButton select = new JButton("Select");
         JButton quit = new JButton("Quit");
-        deal.setBounds(100, 650, 150, 75);
+        select.setBounds(100, 650, 150, 75);
         quit.setBounds(350, 650, 150, 75);
 
         // override the default closing operation to save cards in the buffer
@@ -54,8 +69,8 @@ public class ApplicationGUI {
             @Override
             public void windowClosing(WindowEvent e) {
                 //displays goodbye message upon clicking quit button
-                JOptionPane.showMessageDialog(frame, "Thank you for playing! \nPlay again soon!",
-                        "Goodbye", JOptionPane.INFORMATION_MESSAGE);
+                /*JOptionPane.showMessageDialog(frame, "Thank you for playing! \nPlay again soon!",
+                        "Goodbye", JOptionPane.INFORMATION_MESSAGE);*/
 
                 // write the output file and close application
                 FileOut.writeOutputFile(handsOfCards);
@@ -69,30 +84,27 @@ public class ApplicationGUI {
 
         // ran into problem where code could not display images
         // rewrote original code to allow the program use internal resources for the card images
-        deal.addActionListener(new ActionListener(){
+        select.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
                 HandOfCards hand = new HandOfCards(deck); // draw a new hand
                 handsOfCards.add(hand); // record the hand
 
-                ArrayList<Card> cards = hand.getHand(); // stores cards in hand in an ArrayList named cards
+                ArrayList<Card> cards = hand.getHand(); // Stores cards in hand in an ArrayList named cards
 
-                BufferedImage i1 = null;
-                BufferedImage i2 = null;
-                BufferedImage i3 = null;
-                BufferedImage i4 = null;
+                Integer cardWidth = 160;
+                Integer cardHeight = 240;
 
                 // read the playing card images into memory
-                i1 = getCardImage(cards.get(0));
-                i2 = getCardImage(cards.get(1));
-                i3 = getCardImage(cards.get(2));
-                i4 = getCardImage(cards.get(3));
+                BufferedImage card1 = getCardImage(cards.get(1));
+                BufferedImage card2 = getCardImage(cards.get(0));
+                BufferedImage card3 = getCardImage(cards.get(3));
+                BufferedImage card4 = getCardImage(cards.get(2));
 
-                g.drawImage(i1, 100, 50, 200, 300, null);
-                g.drawImage(i2, 300, 50, 200, 300, null);
-                g.drawImage(i3, 100, 350, 200, 300, null);
-                g.drawImage(i4, 300, 350, 200, 300, null);
-
+                g.drawImage(card1, 60, 250, cardWidth, cardHeight, null);
+                g.drawImage(card2, 60 + cardWidth, 250, cardWidth, cardHeight, null);
+                g.drawImage(card3, 60 + cardWidth * 2, 250, cardWidth, cardHeight, null);
+                g.drawImage(card4, 60 + cardWidth * 3, 250, cardWidth, cardHeight, null);
 
             }
         });
@@ -111,9 +123,15 @@ public class ApplicationGUI {
             }
         });
 
+
+
+
         // adds the deal and quit clickable buttons to the JFrame frame
-        frame.add(deal);
+        frame.add(select);
         frame.add(quit);
+
+        frame.add(mainPanel);
+        frame.add(sidePanel);
 
         // makes the JFrame visible after all components have been added
         frame.setVisible(true);
@@ -123,14 +141,8 @@ public class ApplicationGUI {
         the welcome message
         */
 
-        g.setColor(new Color(60,150,60));
-        g.fillRect(2,2,500,500);
-
         frame.validate();
         frame.repaint();
-
-
-
 
     }
 

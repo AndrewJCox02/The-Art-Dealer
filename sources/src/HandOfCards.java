@@ -28,56 +28,7 @@ public class HandOfCards {
         hand.add(deck.draw());
     }
 
-    // returns a string of formatted Card data
-    private String getFormattedCard(Card card) {
 
-        Integer cardsRank = Integer.valueOf(card.getRank());
-
-        // translate rank from a value between 2 and 14 into a card suit
-        String rank;
-        if (cardsRank <= 10) {
-            rank = String.valueOf(cardsRank);
-        }
-        else {
-            switch (cardsRank) {
-                case 11:
-                    rank = "J";
-                    break;
-                case 12:
-                    rank = "Q";
-                    break;
-                case 13:
-                    rank = "K";
-                    break;
-                case 14:
-                    rank = "A";
-                    break;
-                default:
-                    rank = "Error";
-            }
-        }
-
-        // shorten the cards rank into a one character value
-        String suit;
-        switch (card.getSuit()) {
-            case "clubs":
-                suit = "C";
-                break;
-            case "diamonds":
-                suit = "D";
-                break;
-            case "spades":
-                suit = "S";
-                break;
-            case "hearts":
-                suit = "H";
-                break;
-            default:
-                suit = "Error";
-        }
-
-        return rank + suit;
-    }
 
     // method formats the cards as a comma separated list
     public String getHandAsCsv() {
@@ -86,9 +37,9 @@ public class HandOfCards {
             return "Empty";
         }
 
-        out = getFormattedCard(hand.get(0));
+        out = hand.get(0).getFormattedCard();
         for (int i = 1; i < 4; i++) {
-            out += "," + getFormattedCard(hand.get(i));
+            out += "," + hand.get(i).getFormattedCard();
         }
 
         return out;
