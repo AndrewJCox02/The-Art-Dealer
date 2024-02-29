@@ -12,7 +12,6 @@ public class Card {
     private final String rank;
     private final String suit;
 
-
     /**
      * @param rank The rank of the created card, values between 2 and 14, or joker.
      *             This is stored as a String because of the jokers, as well as
@@ -35,9 +34,14 @@ public class Card {
         return rank + "_of_" + suit;
     }
 
+    // returns a String of card in plain English, such as 2 of Spades
+    public String toPlainString() {
+        return getEnglishRank() + " Of " + String.valueOf(suit.charAt(0)).toUpperCase() + suit.substring(1,suit.length());
+    }
+
     // converts to the 2 through 14 numeric representation of rank
-    private static Integer translateRank(String rank) {
-        switch (rank) {
+    public static Integer translateRank(String rank) {
+        switch (rank.toLowerCase()) {
             case "2":
                 return 2;
             case "3":
@@ -56,20 +60,43 @@ public class Card {
                 return 9;
             case "10":
                 return 10;
-            case "J":
-            case "Jack":
+            case "j":
+            case "jack":
                 return 11;
-            case "Q":
-            case "Queen":
+            case "q":
+            case "queen":
                 return 12;
-            case "K":
-            case "King":
+            case "k":
+            case "king":
                 return 13;
-            case "A":
-            case "Ace":
+            case "a":
+            case "ace":
                 return 14;
             default:
                 return 0;
+        }
+    }
+
+    public String getEnglishRank() {
+
+        // translate rank from a value between 2 and 14 into a card suit
+
+        if (Integer.valueOf(rank) <= 10) {
+             return rank;
+        }
+        else {
+            switch (Integer.valueOf(rank)) {
+                case 11:
+                    return "Jack";
+                case 12:
+                    return "Queen";
+                case 13:
+                    return "King";
+                case 14:
+                    return "Ace";
+                default:
+                    return "Error";
+            }
         }
     }
 
@@ -123,15 +150,15 @@ public class Card {
         return rank + suit;
     }
 
+    // getter for rank
     public String getRank() {
         return rank;
     }
 
+    // getter for suit
     public String getSuit() {
         return suit;
     }
-
-
 
     // checks if two card objects are of the same card
     public Boolean equals(Card card) {

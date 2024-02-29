@@ -1,8 +1,10 @@
 /* File: ApplicationGUI.java
  * Author(s): Andrew Cox, Robert Reinholdt, Schuyler Condon
  * Date: 2/15/2024
- * Purpose: This class is responsible for creating the GUI for the project 1 game.  The GUI as defined by this class
- includes a welcome/informational JOptionPane dialog box, a JFrame with "deal" and "quit" buttons that displays
+ * Purpose: This class is responsible for creating the gui, and running the main application logic,
+ * the gui is structured using a GridBagLayout,
+ * featuring a main area containing the card selector, and a display for the cards,
+ * it also has a side area where a log of previous card sets is displayed
  * different card images, and a goodbye JOptionPane dialog box.
  */
 import javax.imageio.ImageIO;
@@ -16,19 +18,20 @@ import java.util.ArrayList;
 public class ApplicationGUI extends JFrame {
 
     // size constants
-    private Integer windowWidth = 1000;
-    private Integer windowHeight = 800;
-    private Integer cardWidth = 160;
-    private Integer cardHeight = 240;
+    private final Integer windowWidth = 1000;
+    private final Integer windowHeight = 800;
 
     // Variables
-    private ArrayList<HandOfCards> setsOfCards =  new ArrayList<>();
+    private final ArrayList<HandOfCards> setsOfCards =  new ArrayList<>();
+    private final ArrayList<Card> currentSetOfCards = new ArrayList<>();
 
     // references to JComponents
     private JPanel mainPanel;
     private JPanel sidePanel;
-    private JPanel cardPanel;
-    private JList<String> cardLog;
+    private CardPanel cardPanel;
+    private JPanel cardLog;
+    JComboBox<String> CardPickerComboBoxSuits;
+    JComboBox<String> CardPickerComboBoxRanks;
 
     ApplicationGUI() {
         // initialize the basic parameters of the JFrame
@@ -45,27 +48,6 @@ public class ApplicationGUI extends JFrame {
         repaint();
         // display Instructions on how to use the application to the user
         displayUserInstructions();
-
-        /*
-        Graphics mg = mainPanel.getGraphics();
-
-        Integer cardWidth = 160;
-        Integer cardHeight = 240;
-
-        String[] ranks = {"","2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"};
-        JComboBox<String> comboRanks = new JComboBox<>(ranks);
-        comboRanks.setBounds(140,400,20,20);
-
-
-        // JComboBox representing suits of cards
-        String[] suits = {"Clubs", "Diamonds", "Spades", "Hearts"};
-        JComboBox<String> comboSuits = new JComboBox<>(suits);
-        comboSuits.setBounds(60,400,80,20);
-
-        BufferedImage cardImg = getCardImage(new Card("2","hearts"));
-        mg.drawImage(cardImg, 60, 75, cardWidth, cardHeight, null);
-
-        */
     }
 
     // displays a prompt explaining the use of the application
@@ -74,13 +56,9 @@ public class ApplicationGUI extends JFrame {
         UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
         JOptionPane.showMessageDialog(
                 this,
-                "This program will deal four cards at a time, as many times as you want. " +
-                        "\nThere will be no Jokers and no duplicates within the four cards dealt to you, " +
-                        "\nbut you might see repeat cards in different hands. " +
-                        "\nAll hands and the date they were pulled are recorded and stored in the Cards " +
-                        "\nDealt text file that was downloaded with this program. " +
-                        "\n\nTo draw cards click deal, and to stop click quit. Click OK to continue." +
-                        "\n\n",
+                "In This Application, you will select cards one at a time \n" +
+                        "until you make a set of 4, the set will be recorded in the log file\n" +
+                        "and noted on the history section of the screen.",
                 "Welcome to The Art Dealer",
                 JOptionPane.INFORMATION_MESSAGE);
     }
@@ -129,8 +107,9 @@ public class ApplicationGUI extends JFrame {
         add(mainPanel, c);
 
         // define a subsection for the cards to be displayed
-        cardPanel = new JPanel(new GridBagLayout());
+        cardPanel = new CardPanel();
         cardPanel.setBackground(new Color(20,100,20));
+        cardPanel.setIgnoreRepaint(true);
         c = new GridBagConstraints();
         c.gridx=0;
         c.gridy=0;
@@ -159,22 +138,27 @@ public class ApplicationGUI extends JFrame {
         JLabel cardPickerLabel = new JLabel("Card Picker:");
         cardPickerPanel.add(cardPickerLabel);
 
-
+        // ComboBox for the card picker, deals with card ranks
         String[] ranks = {"","2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"};
-        JComboBox<String> CardPickerComboBoxRanks = new JComboBox<>(ranks);
+        CardPickerComboBoxRanks = new JComboBox<>(ranks);
         CardPickerComboBoxRanks.setBounds(140,400,20,20);
         CardPickerComboBoxRanks.setSize(new Dimension(60, 20));
-
+        CardPickerComboBoxRanks.addActionListener(e -> {
+            cardPicker();
+        });
         cardPickerPanel.add(CardPickerComboBoxRanks);
 
+        // "Of" text between the two combo boxes
         JLabel cardPickerOfTxt = new JLabel("Of");
         cardPickerPanel.add(cardPickerOfTxt);
 
-        // JComboBox representing suits of cards
+        // ComboBox for the card picker, deals with card suits
         String[] suits = {"","Clubs", "Diamonds", "Spades", "Hearts"};
-        JComboBox<String> CardPickerComboBoxSuits = new JComboBox<>(suits);
+        CardPickerComboBoxSuits = new JComboBox<>(suits);
         CardPickerComboBoxSuits.setSize(new Dimension(60,20));
-
+        CardPickerComboBoxSuits.addActionListener(e -> {
+            cardPicker();
+        });
         cardPickerPanel.add(CardPickerComboBoxSuits);
 
         // spacer to keep the quit button at the bottom
@@ -187,19 +171,16 @@ public class ApplicationGUI extends JFrame {
         c.fill=GridBagConstraints.BOTH;
         mainPanel.add(spacerPanel,c);
 
-        // quit button in the bottom portion
+        // quit button located at the bottom of the screen
         JButton quit = new JButton("Quit");
         quit.setSize(new Dimension(150,75));
         // assigns quit button to write output file and close application
-        quit.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //JOptionPane.showMessageDialog(mainPanel, "Thank you for playing! \nPlay again soon!",
-                //        "Goodbye", JOptionPane.INFORMATION_MESSAGE);
-                // write the output file and close application
-                FileOut.writeOutputFile(setsOfCards);
-                dispose();
-            }
+        quit.addActionListener(e -> {
+            //JOptionPane.showMessageDialog(mainPanel, "Thank you for playing! \nPlay again soon!",
+            //        "Goodbye", JOptionPane.INFORMATION_MESSAGE);
+            // write the output file and close application
+            FileOut.writeOutputFile(setsOfCards);
+            dispose();
         });
         c = new GridBagConstraints();
         c.gridx=0;
@@ -207,7 +188,6 @@ public class ApplicationGUI extends JFrame {
         c.weightx=0.5;
         c.insets = new Insets(0,0,5,0);
         mainPanel.add(quit,c);
-
     }
 
     // creates and defines layout for the Side JPanel
@@ -221,15 +201,19 @@ public class ApplicationGUI extends JFrame {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 1;
         c.gridy = 0;
-        c.weightx = 0.3;
+        c.weightx = 0.25;
         c.weighty = 1.0;
         c.fill = GridBagConstraints.BOTH;
         add(sidePanel, c);
 
         // Contains a running list of all previous sets of cards
-        cardLog = new JList<>(new String[]{"Entry1","Entry2","Entry3","Entry4","Entry5"});
+        cardLog = new JPanel();
+        cardLog.setLayout(new BoxLayout(cardLog,BoxLayout.Y_AXIS));
+        cardLog.add(Box.createHorizontalGlue());
+
         cardLog.setBackground(new Color(80,170,80));
-        cardLog.setDragEnabled(false);
+        cardLog.add(new JLabel("History Of Cards:"));
+
 
         //create a scrollable area for the card log
         JScrollPane logBox = new JScrollPane(cardLog);
@@ -240,11 +224,80 @@ public class ApplicationGUI extends JFrame {
         c = new GridBagConstraints();
         c.gridx = 0;
         c.gridy = 0;
-        c.weightx = 0.1f;
-        c.weighty = 0.1f;
+        c.weightx = 1.0f;
+        c.weighty = 1.0f;
         c.insets=new Insets(5,5,5,5);
         c.fill = GridBagConstraints.BOTH;
         sidePanel.add(logBox, c);
+    }
+
+    // function called when either the rank or suit combobox value changes
+    // then performs the checks necessary to verify the selected card
+    private void cardPicker() {
+        String selectedRank = (String)CardPickerComboBoxRanks.getSelectedItem();
+        String selectedSuit = (String)CardPickerComboBoxSuits.getSelectedItem();
+
+        // if either rank or suit is still blank, then just return
+        if (selectedRank.isEmpty() || selectedSuit.isEmpty()) {
+            return;
+        }
+
+        // construct a new Card from the rank and value
+        Card card = new Card(String.valueOf(Card.translateRank(selectedRank)),selectedSuit);
+
+        // if the selected card is already in the current set, prompt the user to select another
+        for (Card c : currentSetOfCards) {
+            if (card.equals(c)) {
+                JOptionPane.showMessageDialog(mainPanel, "Please Select a Different Card",
+                        "Card Already Selected", JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+        }
+
+        // if the card is not already in the set then add it to current cards
+        currentSetOfCards.add(card);
+
+        // after saving the card to the set, reset the comboBoxes
+        CardPickerComboBoxRanks.setSelectedIndex(0);
+        CardPickerComboBoxSuits.setSelectedIndex(0);
+
+        // draw already selected cards on the screen,
+        Graphics g = cardPanel.getGraphics();
+
+        //=======================================================
+        //TODO: change how cards are drawn to the screen so
+        // that they dynamically resize like the rest of the UI
+        //=======================================================
+
+        // get the cards than need to be drawn
+        ArrayList<BufferedImage> images = new ArrayList<>();
+        for (Card c : currentSetOfCards) {
+            images.add(getCardImage(c));
+        }
+        // send them to the cardPanel to be drawn
+        cardPanel.setCardImages(images);
+        cardPanel.paintComponent(g);
+
+        // if we have less than 4 cards in the set, return
+        if (currentSetOfCards.size() < 4) {
+            return;
+        }
+
+        // if we have 4 cards in the current set, then add them to the history
+        setsOfCards.add(new HandOfCards(currentSetOfCards));
+
+        // update the log
+        cardLog.add(new JLabel ("Card Set " + setsOfCards.size() + ":"));
+        cardLog.add(new JLabel(currentSetOfCards.get(0).toPlainString() + ","));
+        cardLog.add(new JLabel(currentSetOfCards.get(1).toPlainString() + ","));
+        cardLog.add(new JLabel(currentSetOfCards.get(2).toPlainString() + ","));
+        cardLog.add(new JLabel(currentSetOfCards.get(3).toPlainString()));
+        cardLog.updateUI();
+
+        cardPanel.repaint();
+
+        // clear the set for the next 4 cards
+        currentSetOfCards.clear();
     }
 
     // gets a BufferedImage of the supplied card
@@ -256,5 +309,5 @@ public class ApplicationGUI extends JFrame {
             return null;
         }
     }
-
 }
+

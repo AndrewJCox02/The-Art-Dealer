@@ -18,6 +18,14 @@ public class HandOfCards {
         this.drawNewHand(deck);
     }
 
+    // construct a hand from a list of cards
+    HandOfCards(ArrayList<Card> cards) {
+        for (Card card : cards) {
+            hand.add(card);
+        }
+    }
+
+
     // method draws 4 cards from deck
     public void drawNewHand(Deck deck) {
         hand.clear(); // get rid of previous hand
