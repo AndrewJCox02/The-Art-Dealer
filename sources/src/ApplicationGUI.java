@@ -15,11 +15,16 @@ import java.util.ArrayList;
 
 public class ApplicationGUI extends JFrame {
 
-    // variables
-    private ArrayList<HandOfCards> setsOfCards =  new ArrayList<>();
+    // size constants
     private Integer windowWidth = 1000;
     private Integer windowHeight = 800;
+    private Integer cardWidth = 160;
+    private Integer cardHeight = 240;
 
+    // Variables
+    private ArrayList<HandOfCards> setsOfCards =  new ArrayList<>();
+
+    // references to JComponents
     private JPanel mainPanel;
     private JPanel sidePanel;
     private JPanel cardPanel;
@@ -60,8 +65,6 @@ public class ApplicationGUI extends JFrame {
         BufferedImage cardImg = getCardImage(new Card("2","hearts"));
         mg.drawImage(cardImg, 60, 75, cardWidth, cardHeight, null);
 
-        mainPanel.add(comboRanks);
-        mainPanel.add(comboSuits);
         */
     }
 
@@ -131,10 +134,58 @@ public class ApplicationGUI extends JFrame {
         c = new GridBagConstraints();
         c.gridx=0;
         c.gridy=0;
+        c.gridwidth=2;
         c.weightx=0.1;
         c.weighty=0.6;
         c.fill=GridBagConstraints.BOTH;
         mainPanel.add(cardPanel,c);
+
+
+        // define a subsection for the card picker
+        // the card picker will have two combo boxes that allow the users
+        // to select rank and suit separately for readability
+        JPanel cardPickerPanel = new JPanel();
+        cardPickerPanel.setBackground(new Color(20,130,20));
+        c = new GridBagConstraints();
+        c.gridx=0;
+        c.gridy=1;
+        c.gridwidth=2;
+        c.weightx=0.1;
+        c.weighty=0.0;
+        c.fill=GridBagConstraints.BOTH;
+        mainPanel.add(cardPickerPanel,c);
+
+        // Label for the Card Picker
+        JLabel cardPickerLabel = new JLabel("Card Picker:");
+        cardPickerPanel.add(cardPickerLabel);
+
+
+        String[] ranks = {"","2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"};
+        JComboBox<String> CardPickerComboBoxRanks = new JComboBox<>(ranks);
+        CardPickerComboBoxRanks.setBounds(140,400,20,20);
+        CardPickerComboBoxRanks.setSize(new Dimension(60, 20));
+
+        cardPickerPanel.add(CardPickerComboBoxRanks);
+
+        JLabel cardPickerOfTxt = new JLabel("Of");
+        cardPickerPanel.add(cardPickerOfTxt);
+
+        // JComboBox representing suits of cards
+        String[] suits = {"","Clubs", "Diamonds", "Spades", "Hearts"};
+        JComboBox<String> CardPickerComboBoxSuits = new JComboBox<>(suits);
+        CardPickerComboBoxSuits.setSize(new Dimension(60,20));
+
+        cardPickerPanel.add(CardPickerComboBoxSuits);
+
+        // spacer to keep the quit button at the bottom
+        JPanel spacerPanel = new JPanel();
+        spacerPanel.setOpaque(false);
+        c = new GridBagConstraints();
+        c.gridx=0;
+        c.gridy=2;
+        c.weighty=0.3;
+        c.fill=GridBagConstraints.BOTH;
+        mainPanel.add(spacerPanel,c);
 
         // quit button in the bottom portion
         JButton quit = new JButton("Quit");
@@ -150,13 +201,11 @@ public class ApplicationGUI extends JFrame {
                 dispose();
             }
         });
-
         c = new GridBagConstraints();
         c.gridx=0;
-        c.gridy=1;
+        c.gridy=3;
         c.weightx=0.5;
-        c.weighty=0.4;
-
+        c.insets = new Insets(0,0,5,0);
         mainPanel.add(quit,c);
 
     }
