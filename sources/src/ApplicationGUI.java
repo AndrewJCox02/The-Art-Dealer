@@ -13,16 +13,64 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ApplicationGUI {
+public class ApplicationGUI extends JFrame {
+
+    // variables
+    private ArrayList<HandOfCards> setsOfCards =  new ArrayList<>();
+    private Integer windowWidth = 1000;
+    private Integer windowHeight = 800;
+
+    private JPanel mainPanel;
+    private JPanel sidePanel;
+    private JPanel cardPanel;
+    private JList<String> cardLog;
+
     ApplicationGUI() {
+        // initialize the basic parameters of the JFrame
+        initJFrame();
+        // Create the Main panel which contains the card selector
+        createMainJPanel();
+        // Create the Side panel which contains the card set log
+        createSideJPanel();
+        // configures the exit methods to properly save to the CardsDealt.txt file
+        setupWindowsExit();
+        // check the layout
+        validate();
+        // display the completed JFrame
+        repaint();
+        // display Instructions on how to use the application to the user
+        displayUserInstructions();
 
-        Integer screenWidth = 1000;
-        Integer screenHeight = 800;
+        /*
+        Graphics mg = mainPanel.getGraphics();
 
+        Integer cardWidth = 160;
+        Integer cardHeight = 240;
+
+        String[] ranks = {"","2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"};
+        JComboBox<String> comboRanks = new JComboBox<>(ranks);
+        comboRanks.setBounds(140,400,20,20);
+
+
+        // JComboBox representing suits of cards
+        String[] suits = {"Clubs", "Diamonds", "Spades", "Hearts"};
+        JComboBox<String> comboSuits = new JComboBox<>(suits);
+        comboSuits.setBounds(60,400,80,20);
+
+        BufferedImage cardImg = getCardImage(new Card("2","hearts"));
+        mg.drawImage(cardImg, 60, 75, cardWidth, cardHeight, null);
+
+        mainPanel.add(comboRanks);
+        mainPanel.add(comboSuits);
+        */
+    }
+
+    // displays a prompt explaining the use of the application
+    private void displayUserInstructions() {
         // message box announcing program's purpose and user instructions
-        /*UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
+        UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
         JOptionPane.showMessageDialog(
-                null,
+                this,
                 "This program will deal four cards at a time, as many times as you want. " +
                         "\nThere will be no Jokers and no duplicates within the four cards dealt to you, " +
                         "\nbut you might see repeat cards in different hands. " +
@@ -31,119 +79,123 @@ public class ApplicationGUI {
                         "\n\nTo draw cards click deal, and to stop click quit. Click OK to continue." +
                         "\n\n",
                 "Welcome to The Art Dealer",
-                JOptionPane.INFORMATION_MESSAGE); */
+                JOptionPane.INFORMATION_MESSAGE);
+    }
 
-
-
-        // deck stuff
-        Deck deck = new Deck();
-        ArrayList<HandOfCards> handsOfCards = new ArrayList<>();
-
-        // Creating instance of JFrame
-        JFrame frame = new JFrame();
-        frame.setLayout(null);
-        frame.setVisible(true);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(screenWidth, screenHeight);
-        frame.setTitle("The Art Dealer");
-
-        // divide the frame into panels
-        // main panel where cards are displayed
-        JPanel mainPanel = new JPanel();
-        mainPanel.setBounds(0,0,screenWidth-250,screenHeight);
-        mainPanel.setBackground(new Color(40,160,40));
-
-        // sidebar where a log of card sets is displayed
-        JPanel sidePanel = new JPanel();
-        sidePanel.setBounds(screenWidth-250,0,250,screenHeight);
-        sidePanel.setBackground(new Color(40,120,40));
-
-        // Creating instances of JButton for Deal and Quit buttons
-        JButton select = new JButton("Select");
-        JButton quit = new JButton("Quit");
-        select.setBounds(100, 650, 150, 75);
-        quit.setBounds(350, 650, 150, 75);
-
-        // override the default closing operation to save cards in the buffer
-        frame.addWindowListener(new WindowAdapter() {
+    // changes the default closing operation in windows
+    private void setupWindowsExit() {
+        // overrides the default closing operation to save cards in the buffer
+        // if the user uses the X or "close" button
+        addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                //displays goodbye message upon clicking quit button
-                /*JOptionPane.showMessageDialog(frame, "Thank you for playing! \nPlay again soon!",
-                        "Goodbye", JOptionPane.INFORMATION_MESSAGE);*/
-
                 // write the output file and close application
-                FileOut.writeOutputFile(handsOfCards);
-                frame.dispose();
+                FileOut.writeOutputFile(setsOfCards);
+                dispose();
 
                 System.exit(0);
             }
         });
+    }
 
-        Graphics g = frame.getGraphics();
+    // creates and configures the JFrame
+    private void initJFrame() {
+        // Creating instance of JFrame
+        setVisible(true);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setSize(windowWidth, windowHeight);
+        setLayout(new GridBagLayout());
+        setTitle("The Art Dealer");
+        setLocationRelativeTo(null);
+    }
 
-        // ran into problem where code could not display images
-        // rewrote original code to allow the program use internal resources for the card images
-        select.addActionListener(new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                HandOfCards hand = new HandOfCards(deck); // draw a new hand
-                handsOfCards.add(hand); // record the hand
+    // creates and defines layout for the Main JPanel
+    private void createMainJPanel() {
+        // main panel where cards are displayed
+        mainPanel = new JPanel(new GridBagLayout());
+        mainPanel.setBackground(new Color(40,160,40));
 
-                ArrayList<Card> cards = hand.getHand(); // Stores cards in hand in an ArrayList named cards
+        // the Main panel should fill the left 70% of the window
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx=0;
+        c.gridy=0;
+        c.weightx=0.7;
+        c.weighty=1.0;
+        c.fill=GridBagConstraints.BOTH;
 
-                Integer cardWidth = 160;
-                Integer cardHeight = 240;
+        add(mainPanel, c);
 
-                // read the playing card images into memory
-                BufferedImage card1 = getCardImage(cards.get(1));
-                BufferedImage card2 = getCardImage(cards.get(0));
-                BufferedImage card3 = getCardImage(cards.get(3));
-                BufferedImage card4 = getCardImage(cards.get(2));
+        // define a subsection for the cards to be displayed
+        cardPanel = new JPanel(new GridBagLayout());
+        cardPanel.setBackground(new Color(20,100,20));
+        c = new GridBagConstraints();
+        c.gridx=0;
+        c.gridy=0;
+        c.weightx=0.1;
+        c.weighty=0.6;
+        c.fill=GridBagConstraints.BOTH;
+        mainPanel.add(cardPanel,c);
 
-                g.drawImage(card1, 60, 250, cardWidth, cardHeight, null);
-                g.drawImage(card2, 60 + cardWidth, 250, cardWidth, cardHeight, null);
-                g.drawImage(card3, 60 + cardWidth * 2, 250, cardWidth, cardHeight, null);
-                g.drawImage(card4, 60 + cardWidth * 3, 250, cardWidth, cardHeight, null);
-
-            }
-        });
-
+        // quit button in the bottom portion
+        JButton quit = new JButton("Quit");
+        quit.setSize(new Dimension(150,75));
         // assigns quit button to write output file and close application
         quit.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
-                //displays goodbye message upon clicking quit button
-                JOptionPane.showMessageDialog(frame, "Thank you for playing! \nPlay again soon!",
-                        "Goodbye", JOptionPane.INFORMATION_MESSAGE);
-
+                //JOptionPane.showMessageDialog(mainPanel, "Thank you for playing! \nPlay again soon!",
+                //        "Goodbye", JOptionPane.INFORMATION_MESSAGE);
                 // write the output file and close application
-                FileOut.writeOutputFile(handsOfCards);
-                frame.dispose();
+                FileOut.writeOutputFile(setsOfCards);
+                dispose();
             }
         });
 
+        c = new GridBagConstraints();
+        c.gridx=0;
+        c.gridy=1;
+        c.weightx=0.5;
+        c.weighty=0.4;
 
+        mainPanel.add(quit,c);
 
+    }
 
-        // adds the deal and quit clickable buttons to the JFrame frame
-        frame.add(select);
-        frame.add(quit);
+    // creates and defines layout for the Side JPanel
+    // the side panel will contain a scrollable log of previous sets of 4 cards
+    private void createSideJPanel() {
+        // sidebar where a log of card sets is displayed
+        sidePanel = new JPanel(new GridBagLayout());
+        sidePanel.setBackground(new Color(40,130,40));
 
-        frame.add(mainPanel);
-        frame.add(sidePanel);
+        // the side panel should occupy the right 30% of the window
+        GridBagConstraints c = new GridBagConstraints();
+        c.gridx = 1;
+        c.gridy = 0;
+        c.weightx = 0.3;
+        c.weighty = 1.0;
+        c.fill = GridBagConstraints.BOTH;
+        add(sidePanel, c);
 
-        // makes the JFrame visible after all components have been added
-        frame.setVisible(true);
+        // Contains a running list of all previous sets of cards
+        cardLog = new JList<>(new String[]{"Entry1","Entry2","Entry3","Entry4","Entry5"});
+        cardLog.setBackground(new Color(80,170,80));
+        cardLog.setDragEnabled(false);
 
-        /* the validate and repaint commands are being used to update the display of Swing component.  Here they are
-        being used specifically to fix a problem of the deal and quit buttons not being displayed after
-        the welcome message
-        */
+        //create a scrollable area for the card log
+        JScrollPane logBox = new JScrollPane(cardLog);
+        logBox.createVerticalScrollBar();
 
-        frame.validate();
-        frame.repaint();
-
+        // the logBox should fill all of the Side panel,
+        // a border of around 5 pixels is added for aesthetics
+        c = new GridBagConstraints();
+        c.gridx = 0;
+        c.gridy = 0;
+        c.weightx = 0.1f;
+        c.weighty = 0.1f;
+        c.insets=new Insets(5,5,5,5);
+        c.fill = GridBagConstraints.BOTH;
+        sidePanel.add(logBox, c);
     }
 
     // gets a BufferedImage of the supplied card
@@ -156,9 +208,4 @@ public class ApplicationGUI {
         }
     }
 
-
-
-
-
 }
-

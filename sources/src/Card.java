@@ -57,12 +57,16 @@ public class Card {
             case "10":
                 return 10;
             case "J":
+            case "Jack":
                 return 11;
             case "Q":
+            case "Queen":
                 return 12;
             case "K":
+            case "King":
                 return 13;
             case "A":
+            case "Ace":
                 return 14;
             default:
                 return 0;
