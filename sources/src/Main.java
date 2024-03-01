@@ -6,7 +6,7 @@
 * Group Mates: Andrew Cox, Robert Reinholdt, Schuyler Condon, Dramond Ashford, Marcus Stovall
 * Language & IDE:  This code was written, compiled and built using Java on the Intellij IDEA IDE.
 * External Resource Citations: In the writing of this code several external sources were used to brush up on Java
-syntax and proper use of Java methods, these were CodeProject, The Stack Overflow, and W3Schools.  Github was used
+syntax and proper use of Java methods, these were CodeProject, The Stack Overflow, docs.oracle.com, and W3Schools.  Github was used
 to see how other developers solved similar problems and aided in brainstorming. The Jetbrains website was also used to
 help in properly using the Intellij IDE.
 * Project's Purpose: This project entitled "The Art Dealer", was designed to allow users to draw hands of four
@@ -39,6 +39,6 @@ public class Main {
     public static void main(String[] args) {
         // creates new instance of LaunchGUI class
         // starts GUI
-        LaunchGUI UI = new LaunchGUI();
+        ApplicationGUI UI = new ApplicationGUI();
     }
 }

@@ -15,7 +15,7 @@ public class Deck {
      * instead of the built-in java array because it allows for easier adding
      * cards to and shuffling the deck
      */
-    private List<Cards> deck = new ArrayList<>();
+    private List<Card> deck = new ArrayList<>();
 
     // Creates a new deck of 52 cards and shuffles it
     Deck() {
@@ -24,7 +24,7 @@ public class Deck {
         // Loops through both arrays to create a deck will all the cards
         for (String suit : suits) {
             for (String rank : ranks) {
-                deck.add(new Cards(rank, suit));
+                deck.add(new Card(rank, suit));
             }
         } // After this loop, deck will contain all 52 cards
 
@@ -33,9 +33,9 @@ public class Deck {
     }
 
     // Returns the first card in the deck
-    public Cards draw() {
+    public Card draw() {
         // First card in the deck is removed and put into drawnCard
-        Cards drawnCard = deck.remove(0);
+        Card drawnCard = deck.remove(0);
 
         // The entire deck is rotated, so deck[1] is now deck[0], and deck[0] is now deck[51]
         // and so on throughout the deck

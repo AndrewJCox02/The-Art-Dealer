@@ -11,12 +11,20 @@ import java.util.ArrayList;
 public class HandOfCards {
 
     // ArrayList to hold the cards that are in the hand
-    private final ArrayList<Cards> hand = new ArrayList<>(4);
+    private final ArrayList<Card> hand = new ArrayList<>(4);
 
     // constructor takes a deck and draws a new hand
     HandOfCards(Deck deck) {
         this.drawNewHand(deck);
     }
+
+    // construct a hand from a list of cards
+    HandOfCards(ArrayList<Card> cards) {
+        for (Card card : cards) {
+            hand.add(card);
+        }
+    }
+
 
     // method draws 4 cards from deck
     public void drawNewHand(Deck deck) {
@@ -28,56 +36,7 @@ public class HandOfCards {
         hand.add(deck.draw());
     }
 
-    // returns a string of formatted Card data
-    private String getFormattedCard(Cards card) {
 
-        Integer cardsRank = Integer.valueOf(card.getRank());
-
-        // translate rank from a value between 2 and 14 into a card suit
-        String rank;
-        if (cardsRank <= 10) {
-            rank = String.valueOf(cardsRank);
-        }
-        else {
-            switch (cardsRank) {
-                case 11:
-                    rank = "J";
-                    break;
-                case 12:
-                    rank = "Q";
-                    break;
-                case 13:
-                    rank = "K";
-                    break;
-                case 14:
-                    rank = "A";
-                    break;
-                default:
-                    rank = "Error";
-            }
-        }
-
-        // shorten the cards rank into a one character value
-        String suit;
-        switch (card.getSuit()) {
-            case "clubs":
-                suit = "C";
-                break;
-            case "diamonds":
-                suit = "D";
-                break;
-            case "spades":
-                suit = "S";
-                break;
-            case "hearts":
-                suit = "H";
-                break;
-            default:
-                suit = "Error";
-        }
-
-        return rank + suit;
-    }
 
     // method formats the cards as a comma separated list
     public String getHandAsCsv() {
@@ -86,15 +45,15 @@ public class HandOfCards {
             return "Empty";
         }
 
-        out = getFormattedCard(hand.get(0));
+        out = hand.get(0).getFormattedCard();
         for (int i = 1; i < 4; i++) {
-            out += "," + getFormattedCard(hand.get(i));
+            out += "," + hand.get(i).getFormattedCard();
         }
 
         return out;
     }
 
-    public ArrayList<Cards> getHand() {
+    public ArrayList<Card> getHand() {
         return hand;
     }
 }
