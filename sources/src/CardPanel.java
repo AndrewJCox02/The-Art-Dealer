@@ -1,15 +1,12 @@
 /* File: Cards.java
  * Author(s): Robert Reinholdt
  * Date: 2/29/2024
- * Purpose: This class extends JComponent to control drawing cards onto the screen
+ * Purpose: This class extends JComponent and controls how cards are drawn onto the screen
  */
 
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class CardPanel extends JComponent {

@@ -15,6 +15,7 @@ public class Deck {
      * instead of the built-in java array because it allows for easier adding
      * cards to and shuffling the deck
      */
+
     private List<Card> deck = new ArrayList<>();
 
     // Creates a new deck of 52 cards and shuffles it

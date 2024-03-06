@@ -2,10 +2,11 @@
  * Author(s): Andrew Cox, Robert Reinholdt, Schuyler Condon
  * Date: 2/15/2024
  * Purpose: This class is responsible for creating the gui, and running the main application logic,
- * the gui is structured using a GridBagLayout,
- * featuring a main area containing the card selector, and a display for the cards,
- * it also has a side area where a log of previous card sets is displayed
- * different card images, and a goodbye JOptionPane dialog box.
+ * the gui is structured using a GridBagLayout, the ui is partitioned into two sections,
+ * the main section which has a selector for cards and an area for displaying the cards already selected
+ * it also has a sidebar that shows the history of cards selected,
+ * finally when the application closes it appends a list of the chosen cards to a txt file
+ * by calling the FileOut.writeOutputFile function
  */
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -33,6 +34,7 @@ public class ApplicationGUI extends JFrame {
     JComboBox<String> CardPickerComboBoxSuits;
     JComboBox<String> CardPickerComboBoxRanks;
 
+    // the constructor for ApplicationGUI
     ApplicationGUI() {
         // initialize the basic parameters of the JFrame
         initJFrame();
@@ -56,9 +58,15 @@ public class ApplicationGUI extends JFrame {
         UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
         JOptionPane.showMessageDialog(
                 this,
-                "In This Application, you will select cards one at a time \n" +
-                        "until you make a set of 4, the set will be recorded in the log file\n" +
-                        "and noted on the history section of the screen.",
+                "In This Application, you will select cards one at a time until you,\n" +
+                        "make a set of 4, after which you can begin selecting another set of 4.\n" +
+                        "Every selected set is noted on the right hand side of the screen\n" +
+                        "inside of the History of Cards box.\n" +
+                        "card selection is done using the two comboBoxes at the center of the window,\n" +
+                        "the first box selects the rank of the card, the second box selects suit of the card.\n" +
+                        "The application can be exited at any time by click the quit button,\n" +
+                        "or the windows exit button at the top right of the screen.\n" +
+                        "Any incomplete sets of cards, are lost upon exiting the application.",
                 "Welcome to The Art Dealer",
                 JOptionPane.INFORMATION_MESSAGE);
     }
@@ -91,6 +99,7 @@ public class ApplicationGUI extends JFrame {
     }
 
     // creates and defines layout for the Main JPanel
+    // the main panel contains the card picker, and an area to render selected cards
     private void createMainJPanel() {
         // main panel where cards are displayed
         mainPanel = new JPanel(new GridBagLayout());
@@ -305,6 +314,7 @@ public class ApplicationGUI extends JFrame {
         try {
             return ImageIO.read(getClass().getResource("/PlayingCards/" + card.toString() + ".png"));
         } catch (IOException ioe) {
+
             ioe.printStackTrace();
             return null;
         }

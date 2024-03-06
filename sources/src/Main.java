@@ -1,20 +1,21 @@
 /*
+* Language used: Java
 * File: Main.java
 * Author(s): Andrew Cox, Robert Reinholdt, Schuyler Condon
 * Date: 2/15/2024
 * Class ID: CMP_SCI-4500-001
 * Group Mates: Andrew Cox, Robert Reinholdt, Schuyler Condon, Dramond Ashford, Marcus Stovall
-* Language & IDE:  This code was written, compiled and built using Java on the Intellij IDEA IDE.
+* Language & IDE: This code was written, compiled and built using Java on the Intellij IDEA IDE.
 * External Resource Citations: In the writing of this code several external sources were used to brush up on Java
-syntax and proper use of Java methods, these were CodeProject, The Stack Overflow, docs.oracle.com, and W3Schools.  Github was used
-to see how other developers solved similar problems and aided in brainstorming. The Jetbrains website was also used to
-help in properly using the Intellij IDE.
-* Project's Purpose: This project entitled "The Art Dealer", was designed to allow users to draw hands of four
-cards from a standard 52 card poker deck.  Within the cards drawn there never be duplicate cards in the same hand,
-neither will there be any jokers drawn.  The user can continue drawing cards as long as they want and simply quit the
-program when they are ready to be done.  In the background (not seen on the user interface) the program will also keep
-track of what cards are drawn and the date they were drawn on by writing them into a "DealtCards" text file using EBNF
-grammar.
+* syntax and proper use of Java methods, these were CodeProject, The Stack Overflow, docs.oracle.com, and W3Schools. Github was used
+* to see how other developers solved similar problems and aided in brainstorming. The Jetbrains website was also used to
+* help in properly using the Intellij IDE.
+* Project's Purpose: The art dealer in its current iteration first prompts the user with an explanation of the program's function
+* after the user confirms, they are brought to the applications main window, in the center they can use two comboBoxes to select a card
+* after selecting a card, the card is immediately displayed on screen just above the selector.
+* after the user selects 4 cards, the application will then log the cards in the side panel, showing a running list of all selected sets
+* after the user is done they can exit, discarding any incomplete sets, before closing the application will open and append data to the end
+* of an output file, including the current date and a shorthand representation of each selected card set.
 * Data Structures: This program uses Stack, Arrays, and ArrayList data structure.
 * External Files: A file containing a list of 52 playing cards and their images was used in this project as images to be
 shown to the user of the program.
@@ -31,7 +32,7 @@ on the 'Build Artifacts' button.  From the pop-up menu choose the artifact you j
 Windows executable java file is built and can now be found in the 'Out' file under 'Artifacts' in the program files.  It
 is important to note that the file labeled 'PlayingCards' needs to be put into the same folder as the executable file
 you have just built in order for the program to run properly.
-* Class Purpose: This class is the main class and creates a new instance of LaunchGUI()
+* Class Purpose: This class is the main class and creates a new instance of ApplicationGUI()
 */
 
 // program's main class

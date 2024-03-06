@@ -1,7 +1,7 @@
 /* File: LaunchGUI.java
  * Author(s): Robert Reinholdt, Schuyler Condon
  * Date: 2/14/2024
- * Purpose: This class creates the "CardsDealt.txt" output file using an array of cards as input
+ * Purpose: This class creates the "CardsDealt.txt" output file using an array of card sets as input
  */
 
 import java.io.BufferedWriter;
@@ -14,7 +14,7 @@ import java.util.Date;
 
 public class FileOut {
 
-    // writes the hands of cards to output file
+    // writes the hands of cards to the output file CardsDealt.txt
     public static void writeOutputFile(ArrayList<HandOfCards> in) {
 
         String fileName = "CardsDealt.txt"; // output file's name
@@ -32,7 +32,7 @@ public class FileOut {
                 "/" + (today.getYear() + 1900);
 
 
-        File file = new File(fileName);
+        File file = new File(fileName); // file object representing the location of the output file
         BufferedWriter fOut = null;
 
         try {
@@ -40,7 +40,7 @@ public class FileOut {
             if (file.createNewFile()) {
                 System.out.println("Creating new file [" + fileName + "]");
             }
-            // create a new BufferedWriter, with the FileWriter's append flag being true
+            // create a new BufferedWriter, with the FileWriter's append flag set to true
             fOut = new BufferedWriter(new FileWriter(file.getAbsoluteFile(),true));
             fOut.write(dateLine); // write the current date to the file
             fOut.newLine();

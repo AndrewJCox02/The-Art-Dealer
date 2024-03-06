@@ -1,8 +1,8 @@
 /* File: HandOfCards.java
  * Author(s): Robert Reinholdt, Schuyler Condon
  * Date: 2/14/2024
- * Purpose: This class provides methods to draw a new hand of cards from the deck.  It formats a card as a string
- and formats the hand of cards as comma separated string, and gets the hand of cards.
+ * Purpose: This class represents a HandOfCards, the class has methods to interact with deck objects
+ * and can format the cards as a string representation
  */
 
 import java.util.ArrayList;
@@ -53,6 +53,7 @@ public class HandOfCards {
         return out;
     }
 
+    // returns the hand as an arraylist of cards
     public ArrayList<Card> getHand() {
         return hand;
     }
