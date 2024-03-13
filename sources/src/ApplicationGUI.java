@@ -292,6 +292,11 @@ public class ApplicationGUI extends JFrame {
             return;
         }
 
+        //=======================================================
+        //TODO: Select a subset of the current cards and
+        // add an animation for the selection
+        //=======================================================
+
         // if we have 4 cards in the current set, then add them to the history
         setsOfCards.add(new HandOfCards(currentSetOfCards));
 
@@ -301,6 +306,13 @@ public class ApplicationGUI extends JFrame {
         cardLog.add(new JLabel(currentSetOfCards.get(1).toPlainString() + ","));
         cardLog.add(new JLabel(currentSetOfCards.get(2).toPlainString() + ","));
         cardLog.add(new JLabel(currentSetOfCards.get(3).toPlainString()));
+
+        //=======================================================
+        //TODO: Add the cards selected by the software
+        // to the cardLog along with the choices made by the
+        // user
+        //=======================================================
+
         cardLog.updateUI();
 
         cardPanel.repaint();
