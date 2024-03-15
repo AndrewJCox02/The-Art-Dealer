@@ -4,22 +4,34 @@
  * Purpose: This class extends JComponent and controls how cards are drawn onto the screen
  */
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CardPanel extends JComponent {
 
-
     // array stores the cardImages that are written to the screen
     private ArrayList<BufferedImage> cardImages = new ArrayList<>();
+    private ArrayList<Boolean> selectedCards = new ArrayList<>();
+    private BufferedImage confirmationImage = null;
 
-    // generate 4 evenly spaced points that will act as the center of the y-axis for each card
+    // generate 4 evenly spaced points that will act as the center y-axis for each card
     // use the generated points to scale the cards to an appropriate size and draw them in the scene,
     // finally using the scaled size and position, calculate the size and position of the confirmation symbols
     // note: multiplication is used in place of division to prevent the unlikely,
     // but potentially possible case of a rounded width of zero causing an error
+
+    public CardPanel() {
+        try {
+            confirmationImage = ImageIO.read(getClass().getResource("/PlayingCards/confirmation.png"));
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
+
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -57,15 +69,24 @@ public class CardPanel extends JComponent {
         g.setColor(new Color(20,100,20));
         g.fillRect(0,0,this.getSize().width,this.getSize().height);
 
-        // draw new cards
+        // draw the cards onto the component using the calculated values
         for (int i = 0; i < cardImages.size(); i++) {
             g.drawImage(cardImages.get(i), CardHorizontalOffset + pointDistance * i, CardVerticalOffset, cardWidth, cardHeight, null);
+
+            // if the card is selected, draw a selection overlay
+            if (confirmationImage != null && i < selectedCards.size() && selectedCards.get(i)) {
+                g.drawImage(confirmationImage, CardHorizontalOffset + pointDistance * i, CardVerticalOffset, cardWidth, cardHeight, null);
+            }
         }
     }
 
     // setter for cards buffered images
     public void setCardImages(ArrayList<BufferedImage> in) {
         cardImages = in;
+    }
+
+    public void setSelectedCards(ArrayList<Boolean> in) {
+        selectedCards = in;
     }
 
 }

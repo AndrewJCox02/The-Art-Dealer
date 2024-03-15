@@ -273,18 +273,21 @@ public class ApplicationGUI extends JFrame {
         // draw already selected cards on the screen,
         Graphics g = cardPanel.getGraphics();
 
-        //=======================================================
-        //TODO: change how cards are drawn to the screen so
-        // that they dynamically resize like the rest of the UI
-        //=======================================================
-
         // get the cards than need to be drawn
         ArrayList<BufferedImage> images = new ArrayList<>();
+        ArrayList<Boolean> selectedCards = new ArrayList<>();
         for (Card c : currentSetOfCards) {
+            // add the image to the array
             images.add(getCardImage(c));
+            // add if the card is selected to the array
+            selectedCards.add(ArtDealer.cardPurchased(c));
         }
+
         // send them to the cardPanel to be drawn
+        cardPanel.setSelectedCards(selectedCards);
         cardPanel.setCardImages(images);
+
+        // paint the component
         cardPanel.paintComponent(g);
 
         // if we have less than 4 cards in the set, return
