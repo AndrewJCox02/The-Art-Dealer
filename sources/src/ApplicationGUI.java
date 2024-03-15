@@ -305,13 +305,19 @@ public class ApplicationGUI extends JFrame {
 
         // update the log
         cardLog.add(new JLabel ("Card Set " + setsOfCards.size() + ":"));
-        for (int iter = 0; iter < 4; iter++) {
+        for (int iter = 0; iter < 3; iter++) {
             if (ArtDealer.cardPurchased(currentSetOfCards.get(iter))) {
                 cardLog.add(new JLabel("*" + currentSetOfCards.get(iter).toPlainString() + "*" + ","));
             }
             else {
                 cardLog.add(new JLabel(currentSetOfCards.get(iter).toPlainString() + ","));
             }
+        }
+        if (ArtDealer.cardPurchased(currentSetOfCards.get(3))) {
+            cardLog.add(new JLabel("*" + currentSetOfCards.get(3).toPlainString() + "*"));
+        }
+        else {
+            cardLog.add(new JLabel(currentSetOfCards.get(3).toPlainString()));
         }
 
         //=======================================================
