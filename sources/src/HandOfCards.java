@@ -45,9 +45,20 @@ public class HandOfCards {
             return "Empty";
         }
 
-        out = hand.get(0).getFormattedCard();
+        if (ArtDealer.cardPurchased(hand.get(0))) {
+            out = "*" + hand.get(0).getFormattedCard() + "*";
+        }
+        else {
+            out = hand.get(0).getFormattedCard();
+        }
+
         for (int i = 1; i < 4; i++) {
-            out += "," + hand.get(i).getFormattedCard();
+            if (ArtDealer.cardPurchased(hand.get(i))) {
+                out += "," + "*" + hand.get(i).getFormattedCard() + "*";
+            }
+            else {
+                out += "," + hand.get(i).getFormattedCard();
+            }
         }
 
         return out;

@@ -305,10 +305,14 @@ public class ApplicationGUI extends JFrame {
 
         // update the log
         cardLog.add(new JLabel ("Card Set " + setsOfCards.size() + ":"));
-        cardLog.add(new JLabel(currentSetOfCards.get(0).toPlainString() + ","));
-        cardLog.add(new JLabel(currentSetOfCards.get(1).toPlainString() + ","));
-        cardLog.add(new JLabel(currentSetOfCards.get(2).toPlainString() + ","));
-        cardLog.add(new JLabel(currentSetOfCards.get(3).toPlainString()));
+        for (int iter = 0; iter < 4; iter++) {
+            if (ArtDealer.cardPurchased(currentSetOfCards.get(iter))) {
+                cardLog.add(new JLabel("*" + currentSetOfCards.get(iter).toPlainString() + "*" + ","));
+            }
+            else {
+                cardLog.add(new JLabel(currentSetOfCards.get(iter).toPlainString() + ","));
+            }
+        }
 
         //=======================================================
         //TODO: Add the cards selected by the software
