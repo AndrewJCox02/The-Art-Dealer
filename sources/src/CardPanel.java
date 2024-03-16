@@ -74,7 +74,7 @@ public class CardPanel extends JComponent {
             g.drawImage(cardImages.get(i), CardHorizontalOffset + pointDistance * i, CardVerticalOffset, cardWidth, cardHeight, null);
 
             // if the card is selected, draw a selection overlay
-            if (confirmationImage != null && i < selectedCards.size() && selectedCards.get(i)) {
+            if (confirmationImage != null && i < selectedCards.size() && selectedCards.get(i) && cardImages.size() == 4) {
                 g.drawImage(confirmationImage, CardHorizontalOffset + pointDistance * i, CardVerticalOffset, cardWidth, cardHeight, null);
             }
         }
