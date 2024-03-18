@@ -58,15 +58,15 @@ public class ApplicationGUI extends JFrame {
         UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
         JOptionPane.showMessageDialog(
                 this,
-                "In This Application, you will select cards one at a time until you,\n" +
-                        "make a set of 4, after which you can begin selecting another set of 4.\n" +
-                        "Every selected set is noted on the right hand side of the screen\n" +
-                        "inside of the History of Cards box.\n" +
-                        "card selection is done using the two comboBoxes at the center of the window,\n" +
-                        "the first box selects the rank of the card, the second box selects suit of the card.\n" +
-                        "The application can be exited at any time by click the quit button,\n" +
-                        "or the windows exit button at the top right of the screen.\n" +
-                        "Any incomplete sets of cards, are lost upon exiting the application.",
+                "Welcome to The Art Dealer!\n\n" +
+                        "In this game, your goal is to sell as many cards as possible\n" +
+                        "to the Art Dealer.\n\nFirst, you must choose which cards to sell. " +
+                        "In order to do this, use the \ntwo boxes in the middle of the screen to select " +
+                        "the rank and the suit of a card. \nThis card will then appear on the screen, " +
+                        "indicating it is chosen. \n\nAfter four card selections, the Art Dealer " +
+                        "will purchase a subset of your cards. \nThis will be indicated by a green circle " +
+                        "on the purchased cards. \n\nA history of the selected and purchased cards can be" +
+                        " found on the right hand side of the screen. \n\nGood luck!",
                 "Welcome to The Art Dealer",
                 JOptionPane.INFORMATION_MESSAGE);
     }
