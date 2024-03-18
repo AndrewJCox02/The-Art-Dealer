@@ -71,6 +71,17 @@ public class ApplicationGUI extends JFrame {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
+    // displays a prompt saying goodbye to the user after exit
+    private void displayGoodbyeMessage() {
+        // message box announcing program's purpose and user instructions
+        UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
+        JOptionPane.showMessageDialog(
+                this,
+                "Thank you for playing and have a wonderful day!",
+                "Goodbye!",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
     // changes the default closing operation in windows
     private void setupWindowsExit() {
         // overrides the default closing operation to save cards in the buffer
@@ -80,6 +91,7 @@ public class ApplicationGUI extends JFrame {
             public void windowClosing(WindowEvent e) {
                 // write the output file and close application
                 FileOut.writeOutputFile(setsOfCards);
+                displayGoodbyeMessage();
                 dispose();
 
                 System.exit(0);
@@ -189,6 +201,7 @@ public class ApplicationGUI extends JFrame {
             //        "Goodbye", JOptionPane.INFORMATION_MESSAGE);
             // write the output file and close application
             FileOut.writeOutputFile(setsOfCards);
+            displayGoodbyeMessage();
             dispose();
         });
         c = new GridBagConstraints();
@@ -328,6 +341,7 @@ public class ApplicationGUI extends JFrame {
         if (result == JOptionPane.NO_OPTION) {
             // Do the same thing as if the quit button was pressed
             FileOut.writeOutputFile(setsOfCards);
+            displayGoodbyeMessage();
             dispose();
         }
 
