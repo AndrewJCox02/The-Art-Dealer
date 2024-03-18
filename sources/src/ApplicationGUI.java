@@ -347,6 +347,16 @@ public class ApplicationGUI extends JFrame {
 
         // clear the set for the next 4 cards
         currentSetOfCards.clear();
+
+        // Reset selector boxes
+        CardPickerComboBoxRanks.setSelectedIndex(0);
+        CardPickerComboBoxSuits.setSelectedIndex(0);
+
+        // Get rid of card images
+        cardPanel.setSelectedCards(null);
+        cardPanel.setCardImages(null);
+        cardPanel.paintComponent(g);
+
     }
 
     // gets a BufferedImage of the supplied card
