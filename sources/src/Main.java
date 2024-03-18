@@ -13,7 +13,8 @@
 * Project's Purpose: The art dealer in its current iteration first prompts the user with an explanation of the program's function
 * after the user confirms, they are brought to the applications main window, in the center they can use two comboBoxes to select a card
 * after selecting a card, the card is immediately displayed on screen just above the selector.
-* after the user selects 4 cards, the application will then log the cards in the side panel, showing a running list of all selected sets
+* after the user selects 4 cards,the application does two things: first, it selects which cards are purchased by The Art Dealer.
+* second, the application will log the cards in the side panel, showing a running list of all selected sets and purchased cards.
 * after the user is done they can exit, discarding any incomplete sets, before closing the application will open and append data to the end
 * of an output file, including the current date and a shorthand representation of each selected card set.
 * Data Structures: This program uses Stack, Arrays, and ArrayList data structure.
