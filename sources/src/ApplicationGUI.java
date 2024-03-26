@@ -353,8 +353,8 @@ public class ApplicationGUI extends JFrame {
         CardPickerComboBoxSuits.setSelectedIndex(0);
 
         // Get rid of card images
-        cardPanel.setSelectedCards(null);
-        cardPanel.setCardImages(null);
+        cardPanel.setSelectedCards(new ArrayList<>());
+        cardPanel.setCardImages(new ArrayList<>());
         cardPanel.paintComponent(g);
 
     }
