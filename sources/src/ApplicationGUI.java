@@ -16,6 +16,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 public class ApplicationGUI extends JFrame {
 
     // size constants
@@ -33,6 +34,20 @@ public class ApplicationGUI extends JFrame {
     private JPanel cardLog;
     JComboBox<String> CardPickerComboBoxSuits;
     JComboBox<String> CardPickerComboBoxRanks;
+
+
+    // Enum to represent different patterns
+    private enum Pattern {
+        ALL_RED_CARDS,
+        ALL_CLUBS,
+        ALL_FACE_CARDS,
+        ALL_SINGLE_DIGITS,
+        ALL_SINGLE_DIGIT_PRIMES,
+        HIGHEST_RANK
+    }
+
+    // Variable to store the current pattern
+    private Pattern currentPattern;
 
     // the constructor for ApplicationGUI
     ApplicationGUI() {
@@ -264,6 +279,25 @@ public class ApplicationGUI extends JFrame {
             return;
         }
 
+        // Check if the user has selected 4 cards
+        if (currentSetOfCards.size() == 4) {
+            // Perform actions based on the current pattern
+            switch (currentPattern) {
+                case HIGHEST_RANK:
+                    // Call method to select cards based on highest rank pattern
+                    selectCardsBasedOnHighestRank();
+                    break;
+                default:
+                    // Call method to select cards based on the specified pattern
+                    ArrayList<Boolean> results = ArtDealer.sellCards(currentSetOfCards);
+                    // Update card panel to display purchased cards
+                    updateCardPanel(results);
+                    break;
+            }
+
+            // Remaining code remains unchanged
+        }
+
         // construct a new Card from the rank and value
         Card card = new Card(String.valueOf(Card.translateRank(selectedRank)),selectedSuit);
 
@@ -369,5 +403,39 @@ public class ApplicationGUI extends JFrame {
             return null;
         }
     }
+    // Function to select cards based on highest rank pattern
+    private void selectCardsBasedOnHighestRank() {
+        // Find the card(s) with the highest rank
+        int maxRank = 0;
+        ArrayList<Card> highestRankCards = new ArrayList<>();
+        for (Card card : currentSetOfCards) {
+            int rank = Integer.parseInt(card.getRank());
+            if (rank > maxRank) {
+                maxRank = rank;
+                highestRankCards.clear();
+                highestRankCards.add(card);
+            } else if (rank == maxRank) {
+                highestRankCards.add(card);
+            }
+        }
+
+        // Mark the highest rank cards as purchased
+        ArrayList<Boolean> results = new ArrayList<>(currentSetOfCards.size());
+        for (int i = 0; i < currentSetOfCards.size(); i++) {
+            results.add(i, highestRankCards.contains(currentSetOfCards.get(i)));
+        }
+
+        // Update card panel to display purchased cards
+        updateCardPanel(results);
+    }
+
+    // Function to update the card panel to display purchased cards
+    private void updateCardPanel(ArrayList<Boolean> results) {
+        // Update the card panel to display purchased cards
+        cardPanel.setSelectedCards(results);
+        cardPanel.repaint();
+    }
 }
+
+
 

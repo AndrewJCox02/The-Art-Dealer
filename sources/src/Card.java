@@ -162,9 +162,9 @@ public class Card {
 
     // checks if two card objects are of the same card
     public Boolean equals(Card card) {
-        if (this.toString().equals(card.toString())) {
-            return true;
-        }
-        return false;
+        if (this == card) return true;
+        if (card == null || getClass() != card.getClass()) return false;
+        Card otherCard = (Card) card;
+        return this.rank.equals(otherCard.rank) && this.suit.equals(otherCard.suit);
     }
 }
