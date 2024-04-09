@@ -46,9 +46,6 @@ public class ApplicationGUI extends JFrame {
         HIGHEST_RANK
     }
 
-    // Variable to store the current pattern
-    private Pattern currentPattern;
-
     // the constructor for ApplicationGUI
     ApplicationGUI() {
         // initialize the basic parameters of the JFrame
@@ -327,9 +324,9 @@ public class ApplicationGUI extends JFrame {
             }
         }
 
-
         // code here is run only if all selected cards are true
         if (cardSetCheck) {
+            FileOut.writeLastWon(ArtDealer.currentPattern);
             ArtDealer.currentPattern++;
         }
 

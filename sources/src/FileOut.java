@@ -66,4 +66,37 @@ public class FileOut {
             }
         }
     }
+
+    public static void writeLastWon(Integer pattern) {
+        String fileName = "LastWon.txt"; // output file's name
+
+        File file = new File(fileName); // file object representing the location of the output file
+        BufferedWriter fOut = null;
+
+        try {
+            // create the file if it does not already exist
+            if (file.createNewFile()) {
+                System.out.println("Creating new file [" + fileName + "]");
+            }
+            // create a new BufferedWriter, with the FileWriter's append flag set to true
+            fOut = new BufferedWriter(new FileWriter(file.getAbsoluteFile(),false));
+
+            fOut.write(String.valueOf(pattern));
+        }
+        catch (IOException ioe) {
+            ioe.printStackTrace(); // prints the stack trace if an IOException occurs
+        }
+        finally {
+            // close out the BufferedWriter if it has been initialized at any point
+            if (fOut != null) {
+                try {
+                    fOut.close();
+                }
+                catch (IOException ioe) {
+                    ioe.printStackTrace();
+                }
+            }
+        }
+    }
+
 }
