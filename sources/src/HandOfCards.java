@@ -12,6 +12,7 @@ public class HandOfCards {
 
     // ArrayList to hold the cards that are in the hand
     private final ArrayList<Card> hand = new ArrayList<>(4);
+    private final ArrayList<Boolean> selected = new ArrayList<>(4);
 
     // constructor takes a deck and draws a new hand
     HandOfCards(Deck deck) {
@@ -22,6 +23,16 @@ public class HandOfCards {
     HandOfCards(ArrayList<Card> cards) {
         for (Card card : cards) {
             hand.add(card);
+        }
+    }
+
+    HandOfCards(ArrayList<Card> cards, ArrayList<Boolean> selectedCards) {
+        for (Card card : cards) {
+            hand.add(card);
+        }
+
+        for (boolean bool : selectedCards) {
+            selected.add(bool);
         }
     }
 
@@ -45,7 +56,7 @@ public class HandOfCards {
             return "Empty";
         }
 
-        if (ArtDealer.cardPurchased(hand.get(0))) {
+        if (selected.get(0)) {
             out = "*" + hand.get(0).getFormattedCard() + "*";
         }
         else {
@@ -53,7 +64,7 @@ public class HandOfCards {
         }
 
         for (int i = 1; i < 4; i++) {
-            if (ArtDealer.cardPurchased(hand.get(i))) {
+            if (selected.get(i)) {
                 out += "," + "*" + hand.get(i).getFormattedCard() + "*";
             }
             else {

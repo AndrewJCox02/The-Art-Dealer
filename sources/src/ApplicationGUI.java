@@ -279,25 +279,6 @@ public class ApplicationGUI extends JFrame {
             return;
         }
 
-        // Check if the user has selected 4 cards
-        if (currentSetOfCards.size() == 4) {
-            // Perform actions based on the current pattern
-            switch (currentPattern) {
-                case HIGHEST_RANK:
-                    // Call method to select cards based on highest rank pattern
-                    selectCardsBasedOnHighestRank();
-                    break;
-                default:
-                    // Call method to select cards based on the specified pattern
-                    ArrayList<Boolean> results = ArtDealer.sellCards(currentSetOfCards);
-                    // Update card panel to display purchased cards
-                    updateCardPanel(results);
-                    break;
-            }
-
-            // Remaining code remains unchanged
-        }
-
         // construct a new Card from the rank and value
         Card card = new Card(String.valueOf(Card.translateRank(selectedRank)),selectedSuit);
 
@@ -322,18 +303,12 @@ public class ApplicationGUI extends JFrame {
 
         // get the cards than need to be drawn
         ArrayList<BufferedImage> images = new ArrayList<>();
-        ArrayList<Boolean> selectedCards = new ArrayList<>();
-        for (Card c : currentSetOfCards) {
+        for (Card selectedCard : currentSetOfCards) {
             // add the image to the array
-            images.add(getCardImage(c));
-            // add if the card is selected to the array
-            selectedCards.add(ArtDealer.cardPurchased(c));
+            images.add(getCardImage(selectedCard));
         }
 
-        // send them to the cardPanel to be drawn
-        cardPanel.setSelectedCards(selectedCards);
         cardPanel.setCardImages(images);
-
         // paint the component
         cardPanel.paintComponent(g);
 
@@ -342,29 +317,46 @@ public class ApplicationGUI extends JFrame {
             return;
         }
 
+        ArrayList<Boolean> selectedCards = ArtDealer.cardsPurchased(currentSetOfCards);
+
+        boolean cardSetCheck = true;
+
+        for (boolean bool : selectedCards) {
+            if (!bool) {
+                cardSetCheck = false;
+            }
+        }
+
+
+        // code here is run only if all selected cards are true
+        if (cardSetCheck) {
+            ArtDealer.currentPattern++;
+        }
+
+        // send them to the cardPanel to be drawn
+        cardPanel.setSelectedCards(selectedCards);
+
         // if we have 4 cards in the current set, then add them to the history
-        setsOfCards.add(new HandOfCards(currentSetOfCards));
+        setsOfCards.add(new HandOfCards(currentSetOfCards, selectedCards));
 
         // update the log
         cardLog.add(new JLabel ("Card Set " + setsOfCards.size() + ":"));
         for (int iter = 0; iter < 3; iter++) {
-            if (ArtDealer.cardPurchased(currentSetOfCards.get(iter))) {
+            if (selectedCards.get(iter)) {
                 cardLog.add(new JLabel("*" + currentSetOfCards.get(iter).toPlainString() + "*" + ","));
             }
             else {
                 cardLog.add(new JLabel(currentSetOfCards.get(iter).toPlainString() + ","));
             }
         }
-        if (ArtDealer.cardPurchased(currentSetOfCards.get(3))) {
+        if (selectedCards.get(3)) {
             cardLog.add(new JLabel("*" + currentSetOfCards.get(3).toPlainString() + "*"));
         }
         else {
             cardLog.add(new JLabel(currentSetOfCards.get(3).toPlainString()));
         }
 
-
         cardLog.updateUI();
-
         cardPanel.repaint();
 
         // Confirm message box asking user if they would like to continue playing
@@ -398,35 +390,9 @@ public class ApplicationGUI extends JFrame {
         try {
             return ImageIO.read(getClass().getResource("/PlayingCards/" + card.toString() + ".png"));
         } catch (IOException ioe) {
-
             ioe.printStackTrace();
             return null;
         }
-    }
-    // Function to select cards based on highest rank pattern
-    private void selectCardsBasedOnHighestRank() {
-        // Find the card(s) with the highest rank
-        int maxRank = 0;
-        ArrayList<Card> highestRankCards = new ArrayList<>();
-        for (Card card : currentSetOfCards) {
-            int rank = Integer.parseInt(card.getRank());
-            if (rank > maxRank) {
-                maxRank = rank;
-                highestRankCards.clear();
-                highestRankCards.add(card);
-            } else if (rank == maxRank) {
-                highestRankCards.add(card);
-            }
-        }
-
-        // Mark the highest rank cards as purchased
-        ArrayList<Boolean> results = new ArrayList<>(currentSetOfCards.size());
-        for (int i = 0; i < currentSetOfCards.size(); i++) {
-            results.add(i, highestRankCards.contains(currentSetOfCards.get(i)));
-        }
-
-        // Update card panel to display purchased cards
-        updateCardPanel(results);
     }
 
     // Function to update the card panel to display purchased cards
