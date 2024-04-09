@@ -16,7 +16,7 @@ public class Deck {
      * cards to and shuffling the deck
      */
 
-    private List<Card> deck = new ArrayList<>();
+    private ArrayList<Card> deck = new ArrayList<Card>();
 
     // Creates a new deck of 52 cards and shuffles it
     Deck() {

@@ -35,17 +35,6 @@ public class ApplicationGUI extends JFrame {
     JComboBox<String> CardPickerComboBoxSuits;
     JComboBox<String> CardPickerComboBoxRanks;
 
-
-    // Enum to represent different patterns
-    private enum Pattern {
-        ALL_RED_CARDS,
-        ALL_CLUBS,
-        ALL_FACE_CARDS,
-        ALL_SINGLE_DIGITS,
-        ALL_SINGLE_DIGIT_PRIMES,
-        HIGHEST_RANK
-    }
-
     // the constructor for ApplicationGUI
     ApplicationGUI() {
         // initialize the basic parameters of the JFrame
@@ -85,12 +74,21 @@ public class ApplicationGUI extends JFrame {
 
     // displays a prompt saying goodbye to the user after exit
     private void displayGoodbyeMessage() {
-        // message box announcing program's purpose and user instructions
         UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
         JOptionPane.showMessageDialog(
                 this,
                 "Thank you for playing and have a wonderful day!",
                 "Goodbye!",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    // Displays a prompt congratulating the user on beating the game, then exits
+    private void displayVictoryMessage() {
+        UIManager.put("OptionPane.minimumSize", new Dimension(100, 100));
+        JOptionPane.showMessageDialog(
+                this,
+                "You have successfully beaten the Art Dealer. Congratulations!\nWe hope to see you again! Goodbye!",
+                "The End",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
@@ -357,9 +355,23 @@ public class ApplicationGUI extends JFrame {
         cardPanel.repaint();
 
         // Confirm message box asking user if they would like to continue playing
-        int result = JOptionPane.showConfirmDialog(mainPanel,"Would you like to continue playing?", "Play Again?",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE);
+        int result = 0;
+        if (cardSetCheck && ArtDealer.currentPattern > 5) {
+            FileOut.writeOutputFile(setsOfCards);
+            displayVictoryMessage();
+            dispose();
+        }
+        else if (cardSetCheck) {
+            result = JOptionPane.showConfirmDialog(mainPanel,"Congratulations! You beat the pattern!\nIf you continue playing, the Art Dealer will begin purchasing cards using a NEW pattern!\nWould you like to continue?", "Victory!",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+        }
+        else {
+            result = JOptionPane.showConfirmDialog(mainPanel,"Would you like to continue playing?", "Play Again?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+        }
+
 
         if (result == JOptionPane.NO_OPTION) {
             // Do the same thing as if the quit button was pressed
