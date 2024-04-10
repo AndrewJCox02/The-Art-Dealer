@@ -26,6 +26,8 @@ public class ApplicationGUI extends JFrame {
     // Variables
     private final ArrayList<HandOfCards> setsOfCards =  new ArrayList<>();
     private final ArrayList<Card> currentSetOfCards = new ArrayList<>();
+    private final ArrayList<HandOfCards> currentRoundSetsOfCards = new ArrayList<>();
+    private boolean firstWin = false;
 
     // references to JComponents
     private JPanel mainPanel;
@@ -51,6 +53,29 @@ public class ApplicationGUI extends JFrame {
         repaint();
         // display Instructions on how to use the application to the user
         displayUserInstructions();
+        // initialize currentPattern to the lastWon file if it exists
+        ArtDealer.currentPattern = FileIn.readLastWon();
+
+        // handle if the user has already beaten the game
+        if (ArtDealer.currentPattern > 5) {
+            Integer result = 0;
+            result = JOptionPane.showConfirmDialog(mainPanel, "You have already beaten the art dealer," +
+                            "\n would you like to start from the beginning?",
+                    "You're already the best",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+            // exit
+            if (result == JOptionPane.NO_OPTION) {
+                displayGoodbyeMessage();
+                dispose();
+            }
+            // reset to pattern 0
+            if (result == JOptionPane.YES_OPTION) {
+                ArtDealer.currentPattern = 0;
+                FileOut.writeLastWon(0);
+            }
+        }
+
     }
 
     // displays a prompt explaining the use of the application
@@ -312,6 +337,15 @@ public class ApplicationGUI extends JFrame {
             return;
         }
 
+        for (HandOfCards setOfCards : currentRoundSetsOfCards) {
+            if (compareCards(currentSetOfCards, setOfCards.getHand())) {
+                JOptionPane.showMessageDialog(mainPanel, "Set of cards has already been chosen, try a different set.",
+                        "Repeat Set of Cards", JOptionPane.WARNING_MESSAGE);
+                currentSetOfCards.clear();
+                return;
+            }
+        }
+
         ArrayList<Boolean> selectedCards = ArtDealer.cardsPurchased(currentSetOfCards);
 
         boolean cardSetCheck = true;
@@ -322,17 +356,12 @@ public class ApplicationGUI extends JFrame {
             }
         }
 
-        // code here is run only if all selected cards are true
-        if (cardSetCheck) {
-            FileOut.writeLastWon(ArtDealer.currentPattern);
-            ArtDealer.currentPattern++;
-        }
-
         // send them to the cardPanel to be drawn
         cardPanel.setSelectedCards(selectedCards);
 
         // if we have 4 cards in the current set, then add them to the history
         setsOfCards.add(new HandOfCards(currentSetOfCards, selectedCards));
+        currentRoundSetsOfCards.add(new HandOfCards(currentSetOfCards, selectedCards));
 
         // update the log
         cardLog.add(new JLabel ("Card Set " + setsOfCards.size() + ":"));
@@ -351,20 +380,42 @@ public class ApplicationGUI extends JFrame {
             cardLog.add(new JLabel(currentSetOfCards.get(3).toPlainString()));
         }
 
+
+        // code here is run only if all selected cards are true
+        if (cardSetCheck) {
+            if (firstWin) { // if the user has already selected the set then proceed to the next pattern
+                cardLog.add(new JLabel("USER WON PATTERN " + ArtDealer.currentPattern));
+                setsOfCards.add(new HandOfCards().hasWonSet(ArtDealer.currentPattern));
+                ArtDealer.currentPattern++;
+                FileOut.writeLastWon(ArtDealer.currentPattern);
+                currentRoundSetsOfCards.clear();
+            }
+        }
+
+
         cardLog.updateUI();
         cardPanel.repaint();
 
         // Confirm message box asking user if they would like to continue playing
         int result = 0;
-        if (cardSetCheck && ArtDealer.currentPattern > 5) {
+        if (cardSetCheck && firstWin && ArtDealer.currentPattern > 5) {
             FileOut.writeOutputFile(setsOfCards);
             displayVictoryMessage();
+            firstWin = false;
             dispose();
         }
-        else if (cardSetCheck) {
+        else if (cardSetCheck && firstWin ) {
             result = JOptionPane.showConfirmDialog(mainPanel,"Congratulations! You beat the pattern!\nIf you continue playing, the Art Dealer will begin purchasing cards using a NEW pattern!\nWould you like to continue?", "Victory!",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
+            firstWin = false;
+        }
+        else if (cardSetCheck) {
+            firstWin = true;
+            result = JOptionPane.showConfirmDialog(mainPanel,"Would you like to continue playing?", "Play Again?",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE);
+
         }
         else {
             result = JOptionPane.showConfirmDialog(mainPanel,"Would you like to continue playing?", "Play Again?",
@@ -409,6 +460,36 @@ public class ApplicationGUI extends JFrame {
         // Update the card panel to display purchased cards
         cardPanel.setSelectedCards(results);
         cardPanel.repaint();
+    }
+
+    // function that compares to arrays of cards to see if they have the same contents
+    private boolean compareCards(ArrayList<Card> cards1, ArrayList<Card> cards2) {
+
+        // if they are of different sizes then they cannot be the same
+        if (cards1.size() != cards2.size()) {
+            return false;
+        }
+
+        // loop through cards 1
+        for (Card card1 : cards1) {
+
+            // use contained to check if cards2 contains a givin card from cards1
+            boolean contained = false;
+            for (Card card2 : cards2) {
+                if (card1.equals(card2)) {
+                    contained = true;
+                    break;
+                }
+            }
+
+            // if cards2 does not contain a card in cards1, they are not the same
+            if (!contained) {
+                return false;
+            }
+        }
+
+        // if every card in cards1 is contained in cards2, then they are the same
+        return true;
     }
 }
 

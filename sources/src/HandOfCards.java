@@ -14,10 +14,26 @@ public class HandOfCards {
     private final ArrayList<Card> hand = new ArrayList<>(4);
     private final ArrayList<Boolean> selected = new ArrayList<>(4);
 
+    public Integer getPattern() {
+        return pattern;
+    }
+
+    public Boolean getPatternWon() {
+        return patternWon;
+    }
+
+    private Integer pattern = 0;
+    private Boolean patternWon = false;
+
     // constructor takes a deck and draws a new hand
     HandOfCards(Deck deck) {
         this.drawNewHand(deck);
     }
+
+    HandOfCards() {
+
+    }
+
 
     // construct a hand from a list of cards
     HandOfCards(ArrayList<Card> cards) {
@@ -78,5 +94,11 @@ public class HandOfCards {
     // returns the hand as an arraylist of cards
     public ArrayList<Card> getHand() {
         return hand;
+    }
+
+    public HandOfCards hasWonSet(Integer pattern) {
+        this.pattern = pattern;
+        patternWon = true;
+        return this;
     }
 }

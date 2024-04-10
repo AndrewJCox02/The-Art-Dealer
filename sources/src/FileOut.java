@@ -1,7 +1,7 @@
-/* File: LaunchGUI.java
+/* File: FileOut.java
  * Author(s): Robert Reinholdt, Schuyler Condon
  * Date: 2/14/2024
- * Purpose: This class creates the "CardsDealt.txt" output file using an array of card sets as input
+ * Purpose: This class contains functions for writing output files
  */
 
 import java.io.BufferedWriter;
@@ -38,7 +38,7 @@ public class FileOut {
         try {
             // create the file if it does not already exist
             if (file.createNewFile()) {
-                System.out.println("Creating new file [" + fileName + "]");
+                System.out.println("FileIn: Creating new file [" + fileName + "]");
             }
             // create a new BufferedWriter, with the FileWriter's append flag set to true
             fOut = new BufferedWriter(new FileWriter(file.getAbsoluteFile(),true));
@@ -47,8 +47,13 @@ public class FileOut {
 
             // each hand of cards gets written into file in CSV format
             for (HandOfCards hand : in) {
-                fOut.write(hand.getHandAsCsv());
-                fOut.newLine();
+                if (hand.getPatternWon()) {
+                    fOut.write("USER WON PATTERN " + hand.getPattern());
+                    fOut.newLine();
+                } else {
+                    fOut.write(hand.getHandAsCsv());
+                    fOut.newLine();
+                }
             }
         }
         catch (IOException ioe) {
@@ -67,6 +72,7 @@ public class FileOut {
         }
     }
 
+    // writes the output file LastWon.txt
     public static void writeLastWon(Integer pattern) {
         String fileName = "LastWon.txt"; // output file's name
 
@@ -76,7 +82,7 @@ public class FileOut {
         try {
             // create the file if it does not already exist
             if (file.createNewFile()) {
-                System.out.println("Creating new file [" + fileName + "]");
+                System.out.println("FileIn: Creating new file [" + fileName + "]");
             }
             // create a new BufferedWriter, with the FileWriter's append flag set to true
             fOut = new BufferedWriter(new FileWriter(file.getAbsoluteFile(),false));
