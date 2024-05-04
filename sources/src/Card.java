@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Locale;
 
 /* File: Cards.java
@@ -26,6 +27,72 @@ public class Card {
     Card(String rank, String suit) {
         this.rank = rank.toUpperCase();
         this.suit = suit.toLowerCase();
+    }
+
+    public static void main(String[] args) {
+        // Test cases
+        String[] set1 = {"2H", "3H", "4H", "5H"};
+        String[] set2 = {"JD", "QD", "KD", "AD"};
+        String[] set3 = {"7S", "8S", "9S", "10S"};
+        String[] set4 = {"5H", "4H", "3H", "2H"};
+        String[] set5 = {"JD", "KD", "QD", "AD"};
+        String[] set6 = {"7S", "8D", "9S", "10S"};
+
+        // Test each set
+        testSet(set1);
+        testSet(set2);
+        testSet(set3);
+        testSet(set4);
+        testSet(set5);
+        testSet(set6);
+    }
+
+    public static void testSet(String[] set) {
+        boolean result = isPattern7(set);
+        System.out.println("Cards " + Arrays.toString(set) + " : " + (result ? "Accepted" : "Rejected"));
+    }
+
+    public static boolean isPattern7(String[] set) {
+        if (set.length != 4) {
+            return false;
+        }
+
+        // Check if all cards have the same suit
+        String suit = set[0].substring(1);
+        for (String card : set) {
+            if (!card.substring(1).equals(suit)) {
+                return false;
+            }
+        }
+
+        // Check if ranks are in rising order
+        int[] ranks = new int[4];
+        for (int i = 0; i < 4; i++) {
+            String rankStr = set[i].substring(0, set[i].length() - 1);
+            ranks[i] = getRank(rankStr);
+        }
+        for (int i = 0; i < 3; i++) {
+            if (ranks[i] >= ranks[i + 1]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static int getRank(String rankStr) {
+        switch (rankStr) {
+            case "A":
+                return 14;
+            case "K":
+                return 13;
+            case "Q":
+                return 12;
+            case "J":
+                return 11;
+            default:
+                return Integer.parseInt(rankStr);
+        }
     }
 
     // returns a String representation of the card
@@ -168,3 +235,4 @@ public class Card {
         return this.rank.equals(otherCard.rank) && this.suit.equals(otherCard.suit);
     }
 }
+
