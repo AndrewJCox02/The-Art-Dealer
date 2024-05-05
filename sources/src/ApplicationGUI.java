@@ -54,10 +54,14 @@ public class ApplicationGUI extends JFrame {
         // display Instructions on how to use the application to the user
         displayUserInstructions();
         // initialize currentPattern to the lastWon file if it exists
+
         ArtDealer.currentPattern = FileIn.readLastWon();
 
+        //cardLog.add(new JLabel("Currently on pattern: " + (ArtDealer.currentPattern + 1)));
+        mainPanel.updateUI();
+
         // handle if the user has already beaten the game
-        if (ArtDealer.currentPattern > 7) {
+        if (ArtDealer.currentPattern > ArtDealer.finalPattern) {
             Integer result = 0;
             result = JOptionPane.showConfirmDialog(mainPanel, "You have already beaten the art dealer," +
                             "\n would you like to start from the beginning?",
@@ -346,7 +350,47 @@ public class ApplicationGUI extends JFrame {
             }
         }
 
-        ArrayList<Boolean> selectedCards = ArtDealer.cardsPurchased(currentSetOfCards);
+        ArrayList<Boolean> selectedCards = new ArrayList<>();
+
+        // create the exception in the normal application flow for pattern 9 adds to eleven
+        if(ArtDealer.currentPattern == 8) {
+            // this is bad, but it's the best way to extract the log of selected cards without completely
+            // redesigning the application flow that I could think of.
+
+            ArrayList<HandOfCards> elevensCardLog = ArtDealer.AddsToEleven(currentSetOfCards, mainPanel);
+
+            // logs the selected cards in the application, save for the last which is passed on as it represents every card bought as a whole
+            for (int i = 0; i < elevensCardLog.size() - 1; i++) {
+                // update the log
+                cardLog.add(new JLabel ("Card Set " + (setsOfCards.size() + i) + ":"));
+                for (int iter = 0; iter < 3; iter++) {
+                    if (elevensCardLog.get(i).getSelected().get(iter)) {
+                        cardLog.add(new JLabel("*" + elevensCardLog.get(i).getHand().get(iter).toPlainString() + "*" + ","));
+                    }
+                    else {
+                        cardLog.add(new JLabel(elevensCardLog.get(i).getHand().get(iter).toPlainString() + ","));
+                    }
+                }
+                if (elevensCardLog.get(i).getSelected().get(3)) {
+                    cardLog.add(new JLabel("*" + elevensCardLog.get(i).getHand().get(3).toPlainString() + "*"));
+                }
+                else {
+                    cardLog.add(new JLabel(elevensCardLog.get(i).getHand().get(3).toPlainString()));
+                }
+
+                // add the cards to the sets for the output file
+                setsOfCards.add(elevensCardLog.get(i));
+            }
+
+            // pass the final log through the normal application flow
+            if (elevensCardLog.size() > 0) {
+                selectedCards = elevensCardLog.get(elevensCardLog.size() - 1).getSelected();
+            }
+
+        }
+        else { // normal flow
+            selectedCards = ArtDealer.cardsPurchased(currentSetOfCards);
+        }
 
         boolean cardSetCheck = true;
 
@@ -398,7 +442,7 @@ public class ApplicationGUI extends JFrame {
 
         // Confirm message box asking user if they would like to continue playing
         int result = 0;
-        if (cardSetCheck && firstWin && ArtDealer.currentPattern > 7) {
+        if (cardSetCheck && firstWin && ArtDealer.currentPattern > ArtDealer.finalPattern) {
             FileOut.writeOutputFile(setsOfCards);
             displayVictoryMessage();
             firstWin = false;

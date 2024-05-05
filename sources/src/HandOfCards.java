@@ -101,4 +101,8 @@ public class HandOfCards {
         patternWon = true;
         return this;
     }
+
+    public ArrayList<Boolean> getSelected() {
+        return selected;
+    }
 }
