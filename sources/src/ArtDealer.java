@@ -2,7 +2,7 @@
  * Author(s): Andrew Cox, Robert Reinholdt
  * Date: 3/13/2024
  * Purpose: This class is responsible for the selection of which cards get bought by the
- * simulated art dealer. The functions will return True or False based on whether or not
+ * simulated art dealer. The functions will return True or False based on whether
  * the Art Dealer buys the card.
  */
 
@@ -55,10 +55,9 @@ public class ArtDealer {
     public static ArrayList<Boolean> cardsPurchased (ArrayList<Card> cards) {
         ArrayList<Boolean> out = new ArrayList<>();
 
-
         if (currentPattern < 5) {
             for (Card card : cards) {
-                Boolean result = false;
+                boolean result = false;
 
                 switch (currentPattern) {
                     case 0:
@@ -116,7 +115,7 @@ public class ArtDealer {
             }
         }
         else if (currentPattern == 7) { // skipping by 2, Any suit
-            ArrayList<Integer> ranks = new ArrayList<Integer>();
+            ArrayList<Integer> ranks = new ArrayList<>();
             for (Card card : cards) {
                 ranks.add(Card.translateRank(card.getRank()));
             }
@@ -132,8 +131,26 @@ public class ArtDealer {
                 }
             }
         }
-        else if (currentPattern == 8); // Adds to eleven has handled using its function in applicationGUI due to its interrupt requirement
+        else if (currentPattern == 8); // Adds to eleven is handled using its own function in applicationGUI due to its special requirements
         else if (currentPattern == 9) { // Aces and eights
+            ArrayList<Integer> ranks = new ArrayList<>();
+            for (Card card : cards) {
+                ranks.add(Card.translateRank(card.getRank()));
+            }
+            ranks.sort(null);
+
+            if (ranks.get(0).equals(ranks.get(1)) && ranks.get(2).equals(ranks.get(3)) && ranks.get(0) == 8 && ranks.get(2) == 14) {
+                for (int i = 0; i < 4; i++) {
+                    out.add(true);
+                }
+            }
+            else {
+                for (int i = 0; i < 4; i++) {
+                    out.add(false);
+                }
+            }
+        }
+        else if (currentPattern == 10) {
 
         }
 
@@ -148,7 +165,7 @@ public class ArtDealer {
         ArrayList<HandOfCards> out = new ArrayList<>();
         ArrayList<Integer> ranks = new ArrayList<Integer>();
 
-        // initilize the output to false, so that we can test for successful cases
+        // initialize the output to false, so that we can test for successful cases
         for (int i = 0; i < 4; i++) {
             total.add(false);
         }
@@ -258,7 +275,7 @@ public class ArtDealer {
             out.add(new HandOfCards(new ArrayList<>(cards), new ArrayList<>(Arrays.asList(true,false,true,true))));
         }
 
-        // quadrary case
+        // quaternary case
         if (ranks.get(0) + ranks.get(1) + ranks.get(2) + ranks.get(3) == 11) {
             total.set(0, true);
             total.set(1, true);
@@ -281,8 +298,7 @@ public class ArtDealer {
     // Returns an array of boolean values corresponding to whether or not the cards in
     // an array are purchased or not
     public static ArrayList<Boolean> sellCardsOLD(ArrayList<Card> cards) {
-        boolean foundPattern = true;
-        ArrayList<Boolean> results = new ArrayList<Boolean>();
+        ArrayList<Boolean> results = new ArrayList<>();
         for (int j = 0; j < 4; j++) {
             results.add(Boolean.FALSE);
         }
