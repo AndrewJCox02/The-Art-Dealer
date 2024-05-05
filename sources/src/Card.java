@@ -62,16 +62,16 @@ public class Card {
             case "10":
                 return 10;
             case "j":
-            case "jack":
+            case "jack", "11":
                 return 11;
             case "q":
-            case "queen":
+            case "queen", "12":
                 return 12;
             case "k":
-            case "king":
+            case "king", "13":
                 return 13;
             case "a":
-            case "ace":
+            case "ace", "14":
                 return 14;
             default:
                 return 0;

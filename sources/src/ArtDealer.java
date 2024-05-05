@@ -64,6 +64,23 @@ public class ArtDealer {
                 out.add(cardRank == highestRank);
             }
         }
+        else if (currentPattern == 6) {
+            boolean result;
+            result = cards.get(0).getSuit().equals(cards.get(1).getSuit()) && cards.get(1).getSuit().equals(cards.get(2).getSuit()) && cards.get(2).getSuit().equals(cards.get(3).getSuit());
+            if (result) {   // If all the cards have the same suit
+                result = Card.translateRank(cards.get(0).getRank()) < Card.translateRank(cards.get(1).getRank()) && Card.translateRank(cards.get(1).getRank()) < Card.translateRank(cards.get(2).getRank()) && Card.translateRank(cards.get(2).getRank()) < Card.translateRank(cards.get(3).getRank());
+            }
+            if (result) {   // If the cards are in order
+                for (int i = 0; i < 4; i++) {
+                    out.add(true);  // All cards are accepted
+                }
+            }
+            else {
+                for (int i = 0; i < 4; i++) {
+                    out.add(false);  // All cards are accepted
+                }
+            }
+        }
         else {
             for (Card card : cards) {
                 Boolean result = false;

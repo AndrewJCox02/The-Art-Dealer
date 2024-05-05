@@ -57,7 +57,7 @@ public class ApplicationGUI extends JFrame {
         ArtDealer.currentPattern = FileIn.readLastWon();
 
         // handle if the user has already beaten the game
-        if (ArtDealer.currentPattern > 5) {
+        if (ArtDealer.currentPattern > 6) {
             Integer result = 0;
             result = JOptionPane.showConfirmDialog(mainPanel, "You have already beaten the art dealer," +
                             "\n would you like to start from the beginning?",
@@ -398,7 +398,7 @@ public class ApplicationGUI extends JFrame {
 
         // Confirm message box asking user if they would like to continue playing
         int result = 0;
-        if (cardSetCheck && firstWin && ArtDealer.currentPattern > 5) {
+        if (cardSetCheck && firstWin && ArtDealer.currentPattern > 6) {
             FileOut.writeOutputFile(setsOfCards);
             displayVictoryMessage();
             firstWin = false;
