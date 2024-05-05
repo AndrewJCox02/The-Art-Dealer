@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class ArtDealer {
 
     static public Integer currentPattern = 0;
-    static public Integer finalPattern = 12;
+    static public Integer finalPattern = 11;
 
     static String[] Patterns = {
             "ALL_RED_CARDS",
@@ -181,6 +181,29 @@ public class ArtDealer {
             }
 
             if (suitCheck && ace && king && queen && jack) {
+                for (int i = 0; i < 4; i++) {
+                    out.add(true);
+                }
+            }
+            else {
+                for (int i = 0; i < 4; i++) {
+                    out.add(false);
+                }
+            }
+        }
+        else if (currentPattern == 11) {
+            int numAces = 0;
+            int numBlackJacks = 0;
+            for (Card card : cards) {
+                int currentRank = Card.translateRank(card.getRank());
+                if (currentRank == 14) {
+                    numAces++;
+                }
+                else if (currentRank == 11 && (card.getSuit().equals("clubs") || card.getSuit().equals("spades"))) {
+                    numBlackJacks++;
+                }
+            }
+            if (numAces == 2 && numBlackJacks == 2) {
                 for (int i = 0; i < 4; i++) {
                     out.add(true);
                 }
