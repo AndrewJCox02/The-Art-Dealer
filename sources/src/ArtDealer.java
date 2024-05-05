@@ -81,6 +81,23 @@ public class ArtDealer {
                 }
             }
         }
+        else if (currentPattern == 7) {
+            ArrayList<Integer> ranks = new ArrayList<Integer>();
+            for (Card card : cards) {
+                ranks.add(Card.translateRank(card.getRank()));
+            }
+            ranks.sort(null);
+            if (ranks.get(0) + 2 == ranks.get(1) && ranks.get(1) + 2 == ranks.get(2) && ranks.get(2) + 2 == ranks.get(3)) {
+                for (int i = 0; i < 4; i++) {
+                    out.add(true);
+                }
+            }
+            else {
+                for (int i = 0; i < 4; i++) {
+                    out.add(false);
+                }
+            }
+        }
         else {
             for (Card card : cards) {
                 Boolean result = false;
