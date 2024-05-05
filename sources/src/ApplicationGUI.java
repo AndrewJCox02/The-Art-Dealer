@@ -57,7 +57,7 @@ public class ApplicationGUI extends JFrame {
 
         ArtDealer.currentPattern = FileIn.readLastWon();
 
-        //cardLog.add(new JLabel("Currently on pattern: " + (ArtDealer.currentPattern + 1)));
+        //cardLog.add(new JLabel("!!DEBUG!!: Currently on pattern: " + (ArtDealer.currentPattern)));
         mainPanel.updateUI();
 
         // handle if the user has already beaten the game

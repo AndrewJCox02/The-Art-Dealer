@@ -24,7 +24,7 @@ public class FileIn {
             // create a new BufferedReader
             fIn = new BufferedReader(new FileReader(file.getAbsoluteFile()));
 
-            return fIn.read() - 48;
+            return Integer.valueOf(fIn.readLine());
         }
         catch (IOException ioe) {
             ioe.printStackTrace(); // prints the stack trace if an IOException occurs

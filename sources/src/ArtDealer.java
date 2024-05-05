@@ -150,8 +150,46 @@ public class ArtDealer {
                 }
             }
         }
-        else if (currentPattern == 10) {
+        else if (currentPattern == 10) { // Sort of royal flush
 
+            String suit = cards.get(0).getSuit();
+            boolean suitCheck = true;
+            boolean ace = false;
+            boolean king = false;
+            boolean queen = false;
+            boolean jack = false;
+
+            for (Card card : cards) {
+                // make sure all cards are of the same suit
+                if (!suit.equals(card.getSuit())) {
+                    suitCheck = false;
+                }
+
+                // if the card is one of the desired ranks, check its flag
+                if(Card.translateRank(card.getRank()) == 11) {
+                    jack = true;
+                }
+                if(Card.translateRank(card.getRank()) == 12) {
+                    queen = true;
+                }
+                if(Card.translateRank(card.getRank()) == 13) {
+                    king = true;
+                }
+                if(Card.translateRank(card.getRank()) == 14) {
+                    ace = true;
+                }
+            }
+
+            if (suitCheck && ace && king && queen && jack) {
+                for (int i = 0; i < 4; i++) {
+                    out.add(true);
+                }
+            }
+            else {
+                for (int i = 0; i < 4; i++) {
+                    out.add(false);
+                }
+            }
         }
 
         return out;
