@@ -438,7 +438,6 @@ public class ApplicationGUI extends JFrame {
         // code here is run only if all selected cards are true
         if (cardSetCheck) {
             if (firstWin) { // if the user has already selected the set then proceed to the next pattern
-                noiseMaker.playWinNoise();
                 cardLog.add(new JLabel("USER WON PATTERN " + ArtDealer.currentPattern));
                 setsOfCards.add(new HandOfCards().hasWonSet(ArtDealer.currentPattern));
                 ArtDealer.currentPattern++;
@@ -454,12 +453,14 @@ public class ApplicationGUI extends JFrame {
         // Confirm message box asking user if they would like to continue playing
         int result = 0;
         if (cardSetCheck && firstWin && ArtDealer.currentPattern > ArtDealer.finalPattern) {
+            noiseMaker.playWinNoise();
             FileOut.writeOutputFile(setsOfCards);
             displayVictoryMessage();
             firstWin = false;
             dispose();
         }
         else if (cardSetCheck && firstWin ) {
+            noiseMaker.playWinNoise();
             result = JOptionPane.showConfirmDialog(mainPanel,"Congratulations! You beat the pattern!\nIf you continue playing, the Art Dealer will begin purchasing cards using a NEW pattern!\nWould you like to continue?", "Victory!",
                     JOptionPane.YES_NO_OPTION,
                     JOptionPane.QUESTION_MESSAGE);
