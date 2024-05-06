@@ -88,7 +88,7 @@ public class ApplicationGUI extends JFrame {
         noiseMaker = NoiseMaker.getNoiseMaker();
 
         // debug
-        //noiseMaker.playWinNoise();
+        noiseMaker.playWinNoise();
     }
 
     // displays a prompt explaining the use of the application

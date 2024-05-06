@@ -5,7 +5,7 @@
  */
 
 import javax.sound.sampled.*;
-import java.io.File;
+import java.io.*;
 
 public class NoiseMaker implements LineListener{
 
@@ -25,11 +25,14 @@ public class NoiseMaker implements LineListener{
     // private constructor
     private NoiseMaker() {
         String fileName = "Confirmation.wav";
-        File audioFile = new File(fileName);
 
         try {
+            // get the audio file from resources as a buffered input stream
+            InputStream inputStream = getClass().getResourceAsStream(fileName);
+            BufferedInputStream buffInputStream = new BufferedInputStream(inputStream);
+
             // create an audioInputStream from the audio file
-            audioStream = AudioSystem.getAudioInputStream(audioFile);
+            audioStream = AudioSystem.getAudioInputStream(buffInputStream);
             // get a line from the audio system
             audioClip = AudioSystem.getClip();
             // reserve a spot in the audio system
