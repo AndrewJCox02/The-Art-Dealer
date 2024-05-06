@@ -37,6 +37,9 @@ public class ApplicationGUI extends JFrame {
     JComboBox<String> CardPickerComboBoxSuits;
     JComboBox<String> CardPickerComboBoxRanks;
 
+    // noiseMaker
+    NoiseMaker noiseMaker;
+
     // the constructor for ApplicationGUI
     ApplicationGUI() {
         // initialize the basic parameters of the JFrame
@@ -71,6 +74,7 @@ public class ApplicationGUI extends JFrame {
             // exit
             if (result == JOptionPane.NO_OPTION) {
                 displayGoodbyeMessage();
+                noiseMaker.close();
                 dispose();
             }
             // reset to pattern 0
@@ -80,6 +84,11 @@ public class ApplicationGUI extends JFrame {
             }
         }
 
+        // get a noise maker for use
+        noiseMaker = NoiseMaker.getNoiseMaker();
+
+        // debug
+        //noiseMaker.playWinNoise();
     }
 
     // displays a prompt explaining the use of the application
@@ -131,8 +140,8 @@ public class ApplicationGUI extends JFrame {
                 // write the output file and close application
                 FileOut.writeOutputFile(setsOfCards);
                 displayGoodbyeMessage();
+                noiseMaker.close();
                 dispose();
-
                 System.exit(0);
             }
         });
@@ -241,6 +250,7 @@ public class ApplicationGUI extends JFrame {
             // write the output file and close application
             FileOut.writeOutputFile(setsOfCards);
             displayGoodbyeMessage();
+            noiseMaker.close();
             dispose();
         });
         c = new GridBagConstraints();
@@ -428,6 +438,7 @@ public class ApplicationGUI extends JFrame {
         // code here is run only if all selected cards are true
         if (cardSetCheck) {
             if (firstWin) { // if the user has already selected the set then proceed to the next pattern
+                noiseMaker.playWinNoise();
                 cardLog.add(new JLabel("USER WON PATTERN " + ArtDealer.currentPattern));
                 setsOfCards.add(new HandOfCards().hasWonSet(ArtDealer.currentPattern));
                 ArtDealer.currentPattern++;
@@ -472,6 +483,7 @@ public class ApplicationGUI extends JFrame {
             // Do the same thing as if the quit button was pressed
             FileOut.writeOutputFile(setsOfCards);
             displayGoodbyeMessage();
+            noiseMaker.close();
             dispose();
         }
 
